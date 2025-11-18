@@ -1,8 +1,7 @@
 package dev.spiritstudios.spectre.mixin.registry.metatag;
 
-import dev.spiritstudios.spectre.api.registry.MetatagHolder;
-import dev.spiritstudios.spectre.api.registry.MetatagKey;
-import net.minecraft.world.level.block.Block;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagHolder;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

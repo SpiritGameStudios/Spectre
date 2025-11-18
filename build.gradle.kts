@@ -108,6 +108,8 @@ repositories {
 			includeGroupAndSubgroups("org.parchmentmc")
 		}
 	}
+
+	mavenLocal()
 }
 
 dependencies {
@@ -124,6 +126,8 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 
 	modImplementation(libs.fabric.api)
+
+	implementation(libs.mojank)
 
 	"testmodImplementation"(sourceSets["main"].output)
 	"testmodClientImplementation"(sourceSets["testmod"].output)

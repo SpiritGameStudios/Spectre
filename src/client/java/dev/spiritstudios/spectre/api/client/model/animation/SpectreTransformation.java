@@ -3,62 +3,73 @@ package dev.spiritstudios.spectre.api.client.model.animation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import dev.spiritstudios.spectre.api.client.model.serial.LerpMode;
-import dev.spiritstudios.spectre.api.exception.ImpossibleException;
-import dev.spiritstudios.spectre.api.math.MolangContext;
+import dev.spiritstudios.spectre.api.core.exception.ImpossibleException;
+import dev.spiritstudios.spectre.api.core.math.MolangContext;
+import dev.spiritstudios.spectre.api.core.math.Query;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import net.minecraft.util.Mth;
 
 public record SpectreTransformation(SpectreKeyframe... keyframes) {
 	public static final SpectreTransformation EMPTY = new SpectreTransformation();
 
-	public static final Codec<SpectreTransformation> CODEC = Codec.withAlternative(
-		Codec.dispatchedMap(
-			// Json stores all string keys as strings so we need to do this
-			Codec.STRING.comapFlatMap(
-				str -> {
-					try {
-						return DataResult.success(Float.parseFloat(str));
-					} catch (NumberFormatException e) {
-						return DataResult.error(() -> "Not a valid number: " + str);
-					}
-				},
-				Object::toString
+	public static final Codec<SpectreTransformation> CODEC = codec(false);
+	public static final Codec<SpectreTransformation> CODEC_SIXTEENTH = codec(true);
+
+	private static Codec<SpectreTransformation> codec(boolean rotation) {
+		return Codec.withAlternative(
+			Codec.dispatchedMap(
+				// Json stores all string keys as strings so we need to do this
+				Codec.STRING.comapFlatMap(
+					str -> {
+						try {
+							return DataResult.success(Float.parseFloat(str));
+						} catch (NumberFormatException e) {
+							return DataResult.error(() -> "Not a valid number: " + str);
+						}
+					},
+					Object::toString
+				),
+				f -> SpectreKeyframe.codec(f, rotation)
+			).xmap(
+				map -> new SpectreTransformation(
+					map.values()
+						.stream()
+						.sorted(Comparator.comparing(SpectreKeyframe::timestamp))
+						.toArray(SpectreKeyframe[]::new)
+				),
+				trans -> Arrays.stream(trans.keyframes)
+					.collect(Collectors.toMap(
+						SpectreKeyframe::timestamp,
+						Function.identity()
+					))
 			),
-			SpectreKeyframe::codec
-		).xmap(
-			map -> new SpectreTransformation(
-				map.values()
-					.stream()
-					.sorted(Comparator.comparing(SpectreKeyframe::timestamp))
-					.toArray(SpectreKeyframe[]::new)
-			),
-			trans -> Arrays.stream(trans.keyframes)
-				.collect(Collectors.toMap(
-					SpectreKeyframe::timestamp,
-					Function.identity()
-				))
-		),
-		Vector3fExpression.CODEC.xmap(
-			exp -> new SpectreTransformation(
-				new SpectreKeyframe(
-					0F,
-					exp, exp,
-					LerpMode.LINEAR
-				)
-			),
-			trans -> {
-				throw new ImpossibleException();
-			}
-		)
-	);
+			(rotation ? Vector3fExpression.CODEC_SIXTEENTH : Vector3fExpression.CODEC).xmap(
+				exp -> new SpectreTransformation(
+					new SpectreKeyframe(
+						0F,
+						exp, exp,
+						LerpMode.LINEAR
+					)
+				),
+				trans -> {
+					throw new ImpossibleException();
+				}
+			)
+		);
+	}
+
+	private static final Logger LOGGER = LogManager.getLogger(SpectreTransformation.class);
 
 	public void apply(
-		MolangContext context,
+		Query query,
 		LoopType loop,
 		float runningSeconds,
 		float scale,
@@ -102,6 +113,8 @@ public record SpectreTransformation(SpectreKeyframe... keyframes) {
 			(runningSeconds - startFrame.timestamp()) / (endFrame.timestamp() - startFrame.timestamp()) :
 			0.0F;
 
-		endFrame.lerpMode().apply(context, destination, delta, this.keyframes, start, end, scale);
+		query.anim_time = runningSeconds;
+
+		endFrame.lerpMode().apply(query, destination, delta, this.keyframes, start, end, scale);
 	}
 }

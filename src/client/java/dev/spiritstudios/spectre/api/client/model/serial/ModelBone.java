@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.api.client.model.serial;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.spiritstudios.spectre.api.serialization.SpectreCodecs;
+import dev.spiritstudios.spectre.api.data.serialization.SpectreCodecs;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -25,6 +25,6 @@ public record ModelBone(
 		ExtraCodecs.VECTOR3F.optionalFieldOf("rotation", new Vector3f()).forGetter(ModelBone::rotation),
 		Codec.BOOL.optionalFieldOf("mirror", false).forGetter(ModelBone::mirror),
 		Codec.FLOAT.optionalFieldOf("inflate", 0F).forGetter(ModelBone::inflate),
-		Cube.CODEC.listOf().fieldOf("cubes").forGetter(ModelBone::cubes)
+		Cube.CODEC.listOf().optionalFieldOf("cubes", List.of()).forGetter(ModelBone::cubes)
 	).apply(instance, ModelBone::new));
 }

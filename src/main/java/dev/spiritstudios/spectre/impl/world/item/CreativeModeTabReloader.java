@@ -1,5 +1,6 @@
 package dev.spiritstudios.spectre.impl.world.item;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
@@ -36,12 +37,13 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<ResourceLocation, CreativeModeTabFile>> {
+public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<ResourceLocation, List<JsonElement>>> {
 	public static final ResourceLocation ID = Spectre.id("creative_mode_tabs");
 
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -68,10 +70,8 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 	}
 
 	@Override
-	protected Map<ResourceLocation, CreativeModeTabFile> prepare(SharedState store) {
-		HolderLookup.Provider registries = store.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY);
-		var ops = registries.createSerializationContext(JsonOps.INSTANCE);
-		Map<ResourceLocation, CreativeModeTabFile> output = new Object2ObjectOpenHashMap<>();
+	protected Map<ResourceLocation, List<JsonElement>> prepare(SharedState store) {
+		Map<ResourceLocation, List<JsonElement>> output = new Object2ObjectOpenHashMap<>();
 
 		for (Map.Entry<ResourceLocation, List<Resource>> entry : LISTER.listMatchingResourceStacks(store.resourceManager()).entrySet()) {
 			ResourceLocation fileId = entry.getKey();
@@ -79,25 +79,12 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 
 			for (Resource resource : entry.getValue()) {
 				try (Reader reader = resource.openAsReader()) {
-					CreativeModeTabFile.CODEC.parse(ops, StrictJsonParser.parse(reader)).ifSuccess(object -> {
-						output.compute(
-							id,
-							(key, existing) -> existing != null ? existing.merge(object) : object
-						);
-
-					}).ifError(error -> LOGGER.error("Couldn't parse data file '{}' from '{}': {}", id, fileId, error));
+					output.computeIfAbsent(id, k -> new ArrayList<>())
+						.add(StrictJsonParser.parse(reader));
 				} catch (IllegalArgumentException | IOException | JsonParseException e) {
 					LOGGER.error("Couldn't parse data file '{}' from '{}'", id, fileId, e);
 				}
 			}
-		}
-
-		for (Map.Entry<ResourceLocation, CreativeModeTabFile> entry : output.entrySet()) {
-			var tab = entry.getValue();
-			var id = entry.getKey();
-
-			Objects.requireNonNull(tab.title(), "No display name was specified for creative tab '" + id + "'");
-			Objects.requireNonNull(tab.icon(), "No icon was specified for creative tab '" + id + "'");
 		}
 
 		return output;
@@ -150,10 +137,34 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, CreativeModeTabFile> prepared, SharedState store) {
-		// In vanilla, adding tabs on the server does nothing, this is just for mod compat.
-		apply(prepared);
+	protected void apply(Map<ResourceLocation, List<JsonElement>> prepared, SharedState store) {
+		HolderLookup.Provider registries = store.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY);
+		var ops = registries.createSerializationContext(JsonOps.INSTANCE);
 
-		syncPayload = new CreativeModeTabsS2CPayload(prepared);
+		Map<ResourceLocation, CreativeModeTabFile> files = new Object2ObjectOpenHashMap<>(prepared.size());
+
+		prepared.forEach((id, jsons) -> {
+			for (JsonElement json : jsons) {
+				CreativeModeTabFile.CODEC.parse(ops, json).ifSuccess(object -> {
+					files.compute(
+						id,
+						(key, existing) -> existing != null ? existing.merge(object) : object
+					);
+				}).ifError(error -> LOGGER.error("Couldn't parse data file '{}': {}", id, error));
+			}
+		});
+
+		for (Map.Entry<ResourceLocation, CreativeModeTabFile> entry : files.entrySet()) {
+			var tab = entry.getValue();
+			var id = entry.getKey();
+
+			Objects.requireNonNull(tab.title(), "No display name was specified for creative tab '" + id + "'");
+			Objects.requireNonNull(tab.icon(), "No icon was specified for creative tab '" + id + "'");
+		}
+
+		// In vanilla, adding tabs on the server does nothing, this is just for mod compat.
+		apply(files);
+
+		syncPayload = new CreativeModeTabsS2CPayload(files);
 	}
 }

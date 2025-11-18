@@ -70,7 +70,7 @@ public class SpectreModelRenderer {
 			poseStack.translate(-state.pivot().x, -state.pivot().y, -state.pivot().z);
 
 			for (SpectreCuboid cuboid : bone.cuboids) {
-				queue.submitCustomGeometry(poseStack, RenderType.entityCutoutNoCull(Spectre.id("textures/entity/obabo.png")), (entry, vertexConsumer) -> {
+				queue.submitCustomGeometry(poseStack, RenderType.entityCutoutNoCull(Spectre.id("textures/entity/bloomray.png")), (entry, vertexConsumer) -> {
 					render(entry, vertexConsumer, overlay, light, cuboid);
 				});
 			}

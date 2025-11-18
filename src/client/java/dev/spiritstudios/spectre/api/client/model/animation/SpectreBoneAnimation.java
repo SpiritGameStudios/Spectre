@@ -6,12 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.spiritstudios.spectre.api.client.model.Bone;
 import dev.spiritstudios.spectre.api.client.model.BoneState;
 import dev.spiritstudios.spectre.api.client.model.serial.ActorAnimation;
-import dev.spiritstudios.spectre.api.math.MolangContext;
-import org.jetbrains.annotations.Nullable;
+import dev.spiritstudios.spectre.api.core.math.MolangContext;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Optional;
+
+import dev.spiritstudios.spectre.api.core.math.Query;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 
@@ -33,26 +33,26 @@ public record SpectreBoneAnimation(
 
 	public static Codec<SpectreBoneAnimation> codec(String key) {
 		return RecordCodecBuilder.create(instance -> instance.group(
-			SpectreTransformation.CODEC.optionalFieldOf("position", SpectreTransformation.EMPTY).forGetter(SpectreBoneAnimation::positionKeyframes),
+			SpectreTransformation.CODEC_SIXTEENTH.optionalFieldOf("position", SpectreTransformation.EMPTY).forGetter(SpectreBoneAnimation::positionKeyframes),
 			SpectreTransformation.CODEC.optionalFieldOf("rotation", SpectreTransformation.EMPTY).forGetter(SpectreBoneAnimation::rotationKeyframes),
-			SpectreTransformation.CODEC.optionalFieldOf("scale", SpectreTransformation.EMPTY).forGetter(SpectreBoneAnimation::scaleKeyframes)
+			SpectreTransformation.CODEC_SIXTEENTH.optionalFieldOf("scale", SpectreTransformation.EMPTY).forGetter(SpectreBoneAnimation::scaleKeyframes)
 		).apply(instance, (pos, rot, sca) -> new SpectreBoneAnimation(key, pos, rot, sca)));
 	}
 
-	public void update(BoneState state, Bone bone, ActorAnimation animation, MolangContext context, AnimationState animationState, float age) {
-		this.update(state, bone, animation, context, animationState, age, 1.0F);
+	public void update(BoneState state, Bone bone, ActorAnimation animation, Query query, AnimationState animationState, float age) {
+		this.update(state, bone, animation, query, animationState, age, 1.0F);
 	}
 
 	public void update(
 		BoneState boneState,
 		Bone bone,
 		ActorAnimation animation,
-		MolangContext context,
+		Query query,
 		AnimationState animationState,
 		float age,
 		float speedMultiplier
 	) {
-		animationState.ifStarted(state -> this.update(boneState, bone, animation, context, (long) ((float) state.getTimeInMillis(age) * speedMultiplier), 1.0F));
+		animationState.ifStarted(state -> this.update(boneState, bone, animation, query, (long) ((float) state.getTimeInMillis(age) * speedMultiplier), 1.0F));
 	}
 
 	private float getRunningSeconds(long timeInMilliseconds, LoopType loopType, float length) {
@@ -64,7 +64,7 @@ public record SpectreBoneAnimation(
 		BoneState state,
 		Bone bone,
 		ActorAnimation animation,
-		MolangContext context,
+		Query query,
 		long timeInMilliseconds,
 		float scale
 	) {
@@ -76,25 +76,23 @@ public record SpectreBoneAnimation(
 		state.scale().set(1F);
 
 		positionKeyframes.apply(
-			context,
+			query,
 			animation.loop(),
 			seconds,
 			scale,
 			state.offset()
 		);
 
-
 		rotationKeyframes.apply(
-			context,
+			query,
 			animation.loop(),
 			seconds,
-			Mth.DEG_TO_RAD * scale,
+			scale * Mth.DEG_TO_RAD,
 			state.rotation()
 		);
 
-
 		scaleKeyframes.apply(
-			context,
+			query,
 			animation.loop(),
 			seconds,
 			scale,

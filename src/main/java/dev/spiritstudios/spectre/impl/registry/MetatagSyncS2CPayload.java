@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.impl.registry;
 
-import dev.spiritstudios.spectre.api.registry.MetatagKey;
-import dev.spiritstudios.spectre.api.registry.SpectreRegistryKeys;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
+import dev.spiritstudios.spectre.api.core.registry.SpectreRegistryKeys;
 import dev.spiritstudios.spectre.impl.Spectre;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import java.util.List;

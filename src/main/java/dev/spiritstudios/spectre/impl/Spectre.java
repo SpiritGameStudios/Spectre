@@ -1,8 +1,8 @@
 package dev.spiritstudios.spectre.impl;
 
 import dev.spiritstudios.spectre.api.network.ScreenshakeS2CPayload;
-import dev.spiritstudios.spectre.api.registry.SpectreMetatags;
-import dev.spiritstudios.spectre.api.registry.SpectreRegistries;
+import dev.spiritstudios.spectre.api.core.registry.metatag.SpectreMetatags;
+import dev.spiritstudios.spectre.api.core.registry.SpectreRegistries;
 import dev.spiritstudios.spectre.impl.command.ComponentsCommand;
 import dev.spiritstudios.spectre.impl.command.MetatagCommand;
 import dev.spiritstudios.spectre.impl.command.ScreenshakeCommand;

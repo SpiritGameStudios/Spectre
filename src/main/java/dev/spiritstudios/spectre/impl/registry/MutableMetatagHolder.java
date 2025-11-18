@@ -1,6 +1,6 @@
 package dev.spiritstudios.spectre.impl.registry;
 
-import dev.spiritstudios.spectre.api.registry.MetatagKey;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
 import net.minecraft.core.Holder;
 
 public interface MutableMetatagHolder<T> {

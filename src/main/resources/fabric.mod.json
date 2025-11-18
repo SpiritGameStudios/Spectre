@@ -43,16 +43,16 @@
 		},
 		"loom:injected_interfaces": {
 			"net/minecraft/class_6880": [
-				"dev/spiritstudios/spectre/api/registry/MetatagHolder<TT;>"
+				"dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<TT;>"
 			],
 			"net/minecraft/class_1299": [
-				"dev/spiritstudios/spectre/api/registry/MetatagHolder<Lnet/minecraft/class_1299<*>;>"
+				"dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/class_1299<*>;>"
 			],
 			"net/minecraft/class_2248": [
-				"dev/spiritstudios/spectre/api/registry/MetatagHolder<Lnet/minecraft/class_2248;>"
+				"dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/class_2248;>"
 			],
 			"net/minecraft/class_1792": [
-				"dev/spiritstudios/spectre/api/registry/MetatagHolder<Lnet/minecraft/class_1792;>"
+				"dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/class_1792;>"
 			]
 		}
 	}

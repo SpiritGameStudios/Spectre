@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.impl.registry;
 
-import dev.spiritstudios.spectre.api.exception.ImpossibleException;
-import dev.spiritstudios.spectre.api.registry.MetatagKey;
+import dev.spiritstudios.spectre.api.core.exception.ImpossibleException;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.core.Holder;

@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.mixin.registry.metatag;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import dev.spiritstudios.spectre.api.registry.SpectreMetatags;
+import dev.spiritstudios.spectre.api.core.registry.metatag.SpectreMetatags;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.VillagerType;

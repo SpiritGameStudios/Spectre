@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.spiritstudios.spectre.api.client.model.Bone;
 import dev.spiritstudios.spectre.api.client.model.BoneState;
 import dev.spiritstudios.spectre.api.client.model.SpectreModelRenderer;
+import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.impl.Spectre;
 import dev.spiritstudios.spectre.impl.client.SpectreClient;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -31,9 +32,9 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 				matrices.scale(-1F, -1F, 1f);
 				matrices.translate(0F, -1.501F, 0F);
 
-				var anim = SpectreClient.ANIMATION_MANAGER.animations.get("animation.oblobo.swimmy");
-				var model = SpectreClient.MODEL_MANAGER.models.get("geometry.unknown");
-
+				var anim = SpectreClient.ANIMATION_MANAGER.animations.get("animation.bloomray.idle");
+				var model = SpectreClient.MODEL_MANAGER.models.get("geometry.bloomray");
+				Query query = new Query();
 
 				BiConsumer<Bone, BoneState> animationApplicator = ((bone, boneState) -> {
 					var boneAnim = anim.bones().get(bone.name);
@@ -44,7 +45,7 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 						boneState,
 						bone,
 						anim,
-						null,
+						query,
 						state.animationState,
 						state.ageInTicks
 					);
@@ -76,7 +77,7 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 
 	@Override
 	public @NotNull ResourceLocation getTextureLocation(BlobaboEntityRenderState state) {
-		return Spectre.id("textures/entity/obabo.png");
+		return Spectre.id("textures/entity/bloomray.png");
 	}
 
 	@Override

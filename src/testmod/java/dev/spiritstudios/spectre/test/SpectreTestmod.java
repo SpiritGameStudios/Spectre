@@ -1,8 +1,8 @@
 package dev.spiritstudios.spectre.test;
 
 import com.mojang.serialization.Codec;
-import dev.spiritstudios.spectre.api.registry.MetatagKey;
-import dev.spiritstudios.spectre.api.registry.SpectreRegistries;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
+import dev.spiritstudios.spectre.api.core.registry.SpectreRegistries;
 import dev.spiritstudios.spectre.impl.Spectre;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public final class SpectreTestmod implements ModInitializer {
 	public static final MetatagKey<Block, Integer> TEST_METATAG = new MetatagKey.Builder<>(Registries.BLOCK, Codec.INT)

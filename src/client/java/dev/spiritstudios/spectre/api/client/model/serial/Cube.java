@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.spiritstudios.spectre.api.client.model.SpectreCuboid;
-import dev.spiritstudios.spectre.api.serialization.SpectreCodecs;
+import dev.spiritstudios.spectre.api.data.serialization.SpectreCodecs;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -13,6 +13,7 @@ import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.function.Function;
+
 import net.minecraft.core.Direction;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
@@ -96,37 +97,41 @@ public record Cube(
 
 		Map<Direction, Face> faces = uv.map(
 			// I love box uv
-			uv -> Map.of(
-				Direction.DOWN, new Face(
-					uv.x + this.size.x + this.size.z, uv.y + this.size.z,
-					this.size.x, -this.size.z
-				),
+			uv -> {
+				var uvSize = size.mul(16F, new Vector3f());
 
-				Direction.UP, new Face(
-					uv.x + this.size.z, uv.y,
-					this.size.x, this.size.z
-				),
+				return Map.of(
+					Direction.DOWN, new Face(
+						uv.x + uvSize.x + uvSize.z, uv.y + uvSize.z,
+						uvSize.x, -uvSize.z
+					),
 
-				Direction.NORTH, new Face(
-					uv.x, uv.y + this.size.z,
-					this.size.z, this.size.y
-				),
+					Direction.UP, new Face(
+						uv.x + uvSize.z, uv.y,
+						uvSize.x, uvSize.z
+					),
 
-				Direction.SOUTH, new Face(
-					uv.x + this.size.z + this.size.x + this.size.z, uv.y + this.size.z,
-					this.size.x, this.size.y
-				),
+					Direction.NORTH, new Face(
+						uv.x + uvSize.x + uvSize.z, uv.y + uvSize.y + uvSize.z,
+						-uvSize.x, -uvSize.y
+					),
 
-				Direction.WEST, new Face(
-					uv.x + this.size.z + this.size.x, uv.y + this.size.z,
-					this.size.z, this.size.y
-				),
+					Direction.SOUTH, new Face(
+						uv.x + uvSize.z + uvSize.x + uvSize.x + uvSize.z, uv.y + uvSize.y + uvSize.z,
+						-uvSize.x, -uvSize.y
+					),
 
-				Direction.EAST, new Face(
-					uv.x, uv.y + this.size.z,
-					this.size.z, this.size.y
-				)
-			),
+					Direction.WEST, new Face(
+						uv.x + uvSize.z + uvSize.z + uvSize.x, uv.y + uvSize.y + uvSize.z,
+						-uvSize.z, -uvSize.y
+					),
+
+					Direction.EAST, new Face(
+						uv.x + uvSize.z, uv.y + uvSize.y + uvSize.z,
+						-uvSize.z, -uvSize.y
+					)
+				);
+			},
 			Function.identity()
 		);
 

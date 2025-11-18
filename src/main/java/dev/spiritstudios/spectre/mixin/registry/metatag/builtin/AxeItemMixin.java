@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.mixin.registry.metatag.builtin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.spiritstudios.spectre.api.registry.SpectreMetatags;
+import dev.spiritstudios.spectre.api.core.registry.metatag.SpectreMetatags;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;

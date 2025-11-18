@@ -1,6 +1,6 @@
 package dev.spiritstudios.spectre.mixin.registry.metatag;
 
-import dev.spiritstudios.spectre.api.registry.MetatagHolder;
+import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagHolder;
 import net.minecraft.core.Holder;
 import org.spongepowered.asm.mixin.Mixin;
 

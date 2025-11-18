@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.spiritstudios.spectre.api.client.SpectreScreenshake;
-import dev.spiritstudios.spectre.api.math.SimplexNoise1D;
+import dev.spiritstudios.spectre.api.core.math.SimplexNoise1D;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;

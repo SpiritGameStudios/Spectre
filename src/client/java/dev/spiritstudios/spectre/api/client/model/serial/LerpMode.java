@@ -2,7 +2,8 @@ package dev.spiritstudios.spectre.api.client.model.serial;
 
 import com.mojang.serialization.Codec;
 import dev.spiritstudios.spectre.api.client.model.animation.SpectreKeyframe;
-import dev.spiritstudios.spectre.api.math.MolangContext;
+import dev.spiritstudios.spectre.api.core.math.MolangContext;
+import dev.spiritstudios.spectre.api.core.math.Query;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import org.joml.Vector3f;
@@ -11,19 +12,19 @@ import org.joml.Vector3fc;
 public enum LerpMode implements StringRepresentable {
 	LINEAR("linear") {
 		@Override
-		public void apply(MolangContext context, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale) {
-			var vector3fc = keyframes[start].to().evaluate(context);
-			var vector3fc2 = keyframes[end].from().evaluate(context);
+		public void apply(Query query, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale) {
+			var vector3fc = keyframes[start].to().evaluate(query, null);
+			var vector3fc2 = keyframes[end].from().evaluate(query, null);
 			dest.add(vector3fc.lerp(vector3fc2, delta).mul(scale));
 		}
 	},
 	CATMULL_ROM("catmullrom") {
 		@Override
-		public void apply(MolangContext context, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale) {
-			Vector3fc p0 = keyframes[Math.max(0, start - 1)].to().evaluate(context);
-			Vector3fc p1 = keyframes[start].to().evaluate(context);
-			Vector3fc p2 = keyframes[end].to().evaluate(context);
-			Vector3fc p3 = keyframes[Math.min(keyframes.length - 1, end + 1)].to().evaluate(context);
+		public void apply(Query query, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale) {
+			Vector3fc p0 = keyframes[Math.max(0, start - 1)].to().evaluate(query, null);
+			Vector3fc p1 = keyframes[start].to().evaluate(query, null);
+			Vector3fc p2 = keyframes[end].to().evaluate(query, null);
+			Vector3fc p3 = keyframes[Math.min(keyframes.length - 1, end + 1)].to().evaluate(query, null);
 
 			dest.add(
 				Mth.catmullrom(delta, p0.x(), p1.x(), p2.x(), p3.x()) * scale,
@@ -44,7 +45,7 @@ public enum LerpMode implements StringRepresentable {
 		return name;
 	}
 
-	public abstract void apply(MolangContext context, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale);
+	public abstract void apply(Query query, Vector3f dest, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale);
 
 	public static final Codec<LerpMode> CODEC = StringRepresentable.fromEnum(LerpMode::values);
 }

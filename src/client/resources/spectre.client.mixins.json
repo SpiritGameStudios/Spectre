@@ -17,6 +17,6 @@
 		"requireAnnotations": true
 	},
 	"mixins": [
-		"NarratorMixin"
+		"NarratorMixin",
 	]
 }
