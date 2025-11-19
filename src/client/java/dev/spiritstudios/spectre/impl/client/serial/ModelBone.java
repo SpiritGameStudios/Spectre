@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.api.client.model.serial;
+package dev.spiritstudios.spectre.impl.client.serial;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

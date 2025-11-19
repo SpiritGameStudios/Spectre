@@ -7,8 +7,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import dev.spiritstudios.spectre.impl.serialization.MolangCodec;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import dev.spiritstudios.spectre.impl.serialization.CompilingCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.util.ExtraCodecs;
@@ -74,7 +73,7 @@ public final class SpectreCodecs {
 	);
 
 	public static final Codec<MolangExpression> MOLANG = Codec.withAlternative(
-		MolangCodec.INSTANCE,
+		new CompilingCodec<>(MolangExpression.class),
 		Codec.FLOAT.flatComapMap(
 			v -> (query, variables) -> v,
 			function -> DataResult.error(() -> "Cannot encode molang expression.")

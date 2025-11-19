@@ -6,6 +6,7 @@ import dev.spiritstudios.spectre.api.core.registry.SpectreRegistries;
 import dev.spiritstudios.spectre.impl.command.ComponentsCommand;
 import dev.spiritstudios.spectre.impl.command.MetatagCommand;
 import dev.spiritstudios.spectre.impl.command.ScreenshakeCommand;
+import dev.spiritstudios.spectre.impl.world.entity.animation.AnimationControllerManager;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabReloader;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabsS2CPayload;
 import dev.spiritstudios.spectre.impl.registry.MetatagReloader;
@@ -13,7 +14,9 @@ import dev.spiritstudios.spectre.impl.registry.MetatagSyncS2CPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,11 @@ public final class Spectre implements ModInitializer {
 
 		MetatagReloader.register();
 		CreativeModeTabReloader.register();
+
+		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+			Spectre.id("animation_controllers"),
+			AnimationControllerManager.INSTANCE
+		);
 
 		PayloadTypeRegistry.playS2C().register(
 			ScreenshakeS2CPayload.TYPE,

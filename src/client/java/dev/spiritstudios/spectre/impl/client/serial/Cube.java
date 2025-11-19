@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.api.client.model.serial;
+package dev.spiritstudios.spectre.impl.client.serial;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;

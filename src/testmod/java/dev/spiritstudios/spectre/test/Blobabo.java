@@ -1,13 +1,14 @@
 package dev.spiritstudios.spectre.test;
 
+import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.api.world.entity.EntityPart;
 import dev.spiritstudios.spectre.api.world.entity.PartHolder;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
+import dev.spiritstudios.spectre.api.world.entity.animation.AnimationController;
+import dev.spiritstudios.spectre.impl.Spectre;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -20,12 +21,25 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 		new Vec3(0, 1, 0)
 	));
 
-	public final AnimationState animationState = new AnimationState();
+	private boolean swimming;
 
-	public Blobabo(EntityType<? extends PathfinderMob> entityType, Level world) {
-		super(entityType, world);
+	public final AnimationController movement;
+	public final AnimationController antenna;
 
-		animationState.start(this.tickCount);
+	public Blobabo(EntityType<? extends PathfinderMob> type, Level level) {
+		super(type, level);
+
+		movement = AnimationController.create(
+			Spectre.id("bloomray"),
+			"controller.animation.bloomray.movement",
+			tickCount
+		);
+
+		antenna = AnimationController.create(
+			Spectre.id("bloomray"),
+			"controller.animation.bloomray.antenna",
+			tickCount
+		);
 	}
 
 	@Override
@@ -37,5 +51,22 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 	public void aiStep() {
 		super.aiStep();
 		parts.getFirst().setPos(parts.getFirst().relativePos.add(this.position()));
+	}
+
+	@Override
+	public boolean hurtClient(DamageSource damageSource) {
+		swimming = !swimming;
+		return super.hurtClient(damageSource);
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+
+		var query = Query.of(this);
+		query.is_swimming = swimming;
+
+		movement.tick(query, tickCount);
+		antenna.tick(query, tickCount);
 	}
 }

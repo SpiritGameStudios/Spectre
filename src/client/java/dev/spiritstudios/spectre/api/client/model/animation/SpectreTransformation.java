@@ -2,9 +2,7 @@ package dev.spiritstudios.spectre.api.client.model.animation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import dev.spiritstudios.spectre.api.client.model.serial.LerpMode;
 import dev.spiritstudios.spectre.api.core.exception.ImpossibleException;
-import dev.spiritstudios.spectre.api.core.math.MolangContext;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,6 +71,7 @@ public record SpectreTransformation(SpectreKeyframe... keyframes) {
 		LoopType loop,
 		float runningSeconds,
 		float scale,
+		float transitionProgress,
 		Vector3f destination
 	) {
 		if (keyframes.length == 0) return;
@@ -115,6 +114,12 @@ public record SpectreTransformation(SpectreKeyframe... keyframes) {
 
 		query.anim_time = runningSeconds;
 
-		endFrame.lerpMode().apply(query, destination, delta, this.keyframes, start, end, scale);
+		if (transitionProgress >= 1F) {
+			endFrame.lerpMode().apply(query, destination, delta, this.keyframes, start, end, scale);
+		} else {
+			var v = new Vector3f();
+			endFrame.lerpMode().apply(query, v, delta, this.keyframes, start, end, scale);
+			destination.lerp(v, transitionProgress, destination);
+		}
 	}
 }

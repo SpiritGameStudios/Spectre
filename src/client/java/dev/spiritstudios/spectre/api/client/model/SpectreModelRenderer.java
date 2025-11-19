@@ -40,43 +40,29 @@ public class SpectreModelRenderer {
 	public static void render(
 		PoseStack poseStack,
 		SubmitNodeCollector queue,
+		RenderType renderType,
 		int overlay,
 		int light,
 		Bone bone,
 		BoneState state,
 		BiConsumer<Bone, BoneState> applyAnimations
 	) {
-		state.pivot().set(bone.pivot);
-		state.rotation().set(bone.rotation);
-		state.scale().set(1F);
-		state.offset().set(0F);
+		state.set(bone);
 
 		applyAnimations.accept(bone, state);
 
 		poseStack.pushPose();
 		{
-			poseStack.translate(state.offset().x, state.offset().y, state.offset().z);
-
-			poseStack.translate(state.pivot().x, state.pivot().y, state.pivot().z);
-			poseStack.mulPose(
-				new Quaternionf()
-					.rotateZYX(
-						state.rotation().z,
-						-state.rotation().y,
-						-state.rotation().x
-					)
-			);
-			poseStack.scale(state.scale().x, state.scale().y, state.scale().z);
-			poseStack.translate(-state.pivot().x, -state.pivot().y, -state.pivot().z);
+			state.transform(poseStack);
 
 			for (SpectreCuboid cuboid : bone.cuboids) {
-				queue.submitCustomGeometry(poseStack, RenderType.entityCutoutNoCull(Spectre.id("textures/entity/bloomray.png")), (entry, vertexConsumer) -> {
+				queue.submitCustomGeometry(poseStack, renderType, (entry, vertexConsumer) -> {
 					render(entry, vertexConsumer, overlay, light, cuboid);
 				});
 			}
 
 			for (Bone child : bone.children) {
-				render(poseStack, queue, overlay, light, child, state, applyAnimations);
+				render(poseStack, queue, renderType, overlay, light, child, state, applyAnimations);
 			}
 		}
 		poseStack.popPose();

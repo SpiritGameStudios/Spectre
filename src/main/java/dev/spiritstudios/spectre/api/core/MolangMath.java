@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.impl.client.animation;
+package dev.spiritstudios.spectre.api.core;
 
 import dev.spiritstudios.mojank.meow.binding.Pure;
 import net.minecraft.util.Mth;
@@ -61,6 +61,14 @@ public final class MolangMath {
 	public static int die_roll_integer(float num, float low, float high) {
 		// TODO
 		throw new NotImplementedException();
+	}
+
+	public static float random(float low, float high) {
+		// TODO
+		float min = Math.min(low, high);
+		float max = Math.max(low, high);
+
+		return min + (float) Math.random() * (max - min);
 	}
 
 	// What the fuck

@@ -1,8 +1,9 @@
 package dev.spiritstudios.spectre.test;
 
+import dev.spiritstudios.spectre.api.client.model.animation.AnimationControllerRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-import net.minecraft.world.entity.AnimationState;
 
 public class BlobaboEntityRenderState extends LivingEntityRenderState {
-	public final AnimationState animationState = new AnimationState();
+	public final AnimationControllerRenderState movement = new AnimationControllerRenderState();
+	public final AnimationControllerRenderState antenna = new AnimationControllerRenderState();
 }

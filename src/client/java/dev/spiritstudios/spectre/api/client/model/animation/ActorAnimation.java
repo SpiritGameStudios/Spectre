@@ -1,9 +1,7 @@
-package dev.spiritstudios.spectre.api.client.model.serial;
+package dev.spiritstudios.spectre.api.client.model.animation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.spiritstudios.spectre.api.client.model.animation.LoopType;
-import dev.spiritstudios.spectre.api.client.model.animation.SpectreBoneAnimation;
 
 import java.util.Map;
 
@@ -13,7 +11,7 @@ public record ActorAnimation(
 	Map<String, SpectreBoneAnimation> bones
 ) {
 	public static final Codec<ActorAnimation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		LoopType.CODEC.fieldOf("loop").forGetter(ActorAnimation::loop),
+		LoopType.CODEC.optionalFieldOf("loop", LoopType.FALSE).forGetter(ActorAnimation::loop),
 		Codec.floatRange(0F, Float.MAX_VALUE).optionalFieldOf("animation_length", -1F).forGetter(ActorAnimation::length),
 		Codec.dispatchedMap(
 			Codec.STRING,

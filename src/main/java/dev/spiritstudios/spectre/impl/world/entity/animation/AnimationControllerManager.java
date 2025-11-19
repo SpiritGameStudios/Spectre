@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.api.client.model.animation;
+package dev.spiritstudios.spectre.impl.world.entity.animation;
 
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
@@ -7,11 +7,11 @@ import dev.spiritstudios.mojank.meow.Variables;
 import dev.spiritstudios.mojank.meow.analysis.AnalysisResult;
 import dev.spiritstudios.mojank.meow.compile.CompilerFactory;
 import dev.spiritstudios.mojank.meow.compile.Linker;
+import dev.spiritstudios.spectre.api.core.MolangMath;
 import dev.spiritstudios.spectre.api.core.math.MolangExpression;
 import dev.spiritstudios.spectre.api.core.math.Query;
-import dev.spiritstudios.spectre.impl.client.serial.AnimationJson;
+import dev.spiritstudios.spectre.api.world.entity.animation.BooleanExpression;
 import dev.spiritstudios.spectre.impl.serialization.CompilerOps;
-import dev.spiritstudios.spectre.api.core.MolangMath;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
 import net.minecraft.resources.FileToIdConverter;
@@ -34,13 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SpectreAnimationManager extends SimpleResourceReloader<Map<ResourceLocation, Map<String, ActorAnimation>>> {
+public class AnimationControllerManager extends SimpleResourceReloader<Map<ResourceLocation, Map<String, AnimationControllerDesc>>> {
+	public static final AnimationControllerManager INSTANCE = new AnimationControllerManager();
+
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-	private static final CompilerFactory<MolangExpression> FACTORY = new CompilerFactory<>(
+	private static final CompilerFactory<BooleanExpression> FACTORY = new CompilerFactory<>(
 		LOOKUP,
-		MolangExpression.class,
+		BooleanExpression.class,
 		Linker.UNTRUSTED.toBuilder()
 			.addAllowedClasses(
 				Variables.class,
@@ -48,18 +50,18 @@ public class SpectreAnimationManager extends SimpleResourceReloader<Map<Resource
 				Vector4fc.class, Vector4f.class,
 				Vector3fc.class, Vector3f.class,
 				Vector2fc.class, Vector2f.class,
-				MolangExpression.class, Query.class
+				MolangExpression.class, BooleanExpression.class, Query.class
 			)
 			.aliasClass(MolangMath.class, "math")
 			.build()
 	);
 
-	public static final FileToIdConverter LISTER = new FileToIdConverter("spectre/animations", ".animation.json");
+	public static final FileToIdConverter LISTER = new FileToIdConverter("spectre/animation_controllers", ".animation_controllers.json");
 
-	public final Map<ResourceLocation, Map<String, ActorAnimation>> animations = new Object2ObjectOpenHashMap<>();
+	public final Map<ResourceLocation, Map<String, AnimationControllerDesc>> controllers = new Object2ObjectOpenHashMap<>();
 
 	@Override
-	protected Map<ResourceLocation, Map<String, ActorAnimation>> prepare(SharedState store) {
+	protected Map<ResourceLocation, Map<String, AnimationControllerDesc>> prepare(SharedState store) {
 		var resources = LISTER.listMatchingResourceStacks(store.resourceManager());
 
 		var compiler = FACTORY.build(new AnalysisResult(
@@ -67,9 +69,9 @@ public class SpectreAnimationManager extends SimpleResourceReloader<Map<Resource
 			null
 		));
 
-		var ops = new CompilerOps<>(JsonOps.INSTANCE, compiler, MolangExpression.class);
+		var ops = new CompilerOps<>(JsonOps.INSTANCE, compiler, BooleanExpression.class);
 
-		Map<ResourceLocation, Map<String, ActorAnimation>> results = new HashMap<>();
+		Map<ResourceLocation, Map<String, AnimationControllerDesc>> results = new HashMap<>();
 
 		for (Map.Entry<ResourceLocation, List<Resource>> entry : resources.entrySet()) {
 			var id = LISTER.fileToId(entry.getKey());
@@ -77,18 +79,11 @@ public class SpectreAnimationManager extends SimpleResourceReloader<Map<Resource
 
 			for (Resource resource : entry.getValue()) {
 				try (Reader reader = resource.openAsReader()) {
-					AnimationJson.CODEC.parse(ops, StrictJsonParser.parse(reader))
-						.ifSuccess(animations -> {
-							animations.animations().forEach((name, animation) -> {
-								value.put(
-									name.replaceFirst("animation." + id.getPath() + ".", ""),
-									animation
-								);
-							});
-						})
-						.ifError(error -> LOGGER.error("Couldn't parse animations file '{}': {}", id, error));
+					AnimationControllersJson.CODEC.parse(ops, StrictJsonParser.parse(reader))
+						.ifSuccess(controllers -> value.putAll(controllers.controllers()))
+						.ifError(error -> LOGGER.error("Couldn't parse animations controller file '{}': {}", id, error));
 				} catch (IllegalArgumentException | IOException | JsonParseException error) {
-					LOGGER.error("Couldn't parse animation file '{}': {}", id, error);
+					LOGGER.error("Couldn't parse animation controller file '{}': {}", id, error);
 				}
 			}
 		}
@@ -97,8 +92,8 @@ public class SpectreAnimationManager extends SimpleResourceReloader<Map<Resource
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, Map<String, ActorAnimation>> prepared, SharedState store) {
-		animations.clear();
-		animations.putAll(prepared);
+	protected void apply(Map<ResourceLocation, Map<String, AnimationControllerDesc>> prepared, SharedState store) {
+		controllers.clear();
+		controllers.putAll(prepared);
 	}
 }

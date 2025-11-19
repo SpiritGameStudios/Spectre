@@ -7,6 +7,7 @@ import dev.spiritstudios.spectre.api.client.model.SpectreModelRenderer;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.impl.Spectre;
 import dev.spiritstudios.spectre.impl.client.SpectreClient;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -32,24 +33,32 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 				matrices.scale(-1F, -1F, 1f);
 				matrices.translate(0F, -1.501F, 0F);
 
-				var anim = SpectreClient.ANIMATION_MANAGER.animations.get("animation.bloomray.idle");
-				var model = SpectreClient.MODEL_MANAGER.models.get("geometry.bloomray");
+				var animations = SpectreClient.ANIMATION_MANAGER.animations
+					.get(Spectre.id("bloomray"));
+
+				var model = SpectreClient.MODEL_MANAGER.models.get(
+					Spectre.id("bloomray")
+				).get("geometry.bloomray");
+
 				Query query = new Query();
 
-				BiConsumer<Bone, BoneState> animationApplicator = ((bone, boneState) -> {
-					var boneAnim = anim.bones().get(bone.name);
-
-					if (boneAnim == null) return;
-
-					boneAnim.update(
-						boneState,
+				BiConsumer<Bone, BoneState> animationApplicator = (bone, boneState) -> {
+					state.movement.apply(
 						bone,
-						anim,
+						boneState,
+						animations,
 						query,
-						state.animationState,
 						state.ageInTicks
 					);
-				});
+
+					state.antenna.apply(
+						bone,
+						boneState,
+						animations,
+						query,
+						state.ageInTicks
+					);
+				};
 
 				var boneState = new BoneState(
 					new Vector3f(),
@@ -62,6 +71,7 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 					SpectreModelRenderer.render(
 						matrices,
 						queue,
+						RenderType.entityCutoutNoCull(getTextureLocation(state)),
 						OverlayTexture.NO_OVERLAY,
 						light,
 						bone,
@@ -89,7 +99,8 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 	public void extractRenderState(Blobabo entity, BlobaboEntityRenderState state, float tickProgress) {
 		super.extractRenderState(entity, state, tickProgress);
 
-		state.animationState.copyFrom(entity.animationState);
+		state.movement.copyFrom(entity.movement);
+		state.antenna.copyFrom(entity.antenna);
 	}
 
 	@Override

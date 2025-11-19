@@ -1,8 +1,6 @@
-package dev.spiritstudios.spectre.api.client.model.serial;
+package dev.spiritstudios.spectre.api.client.model.animation;
 
 import com.mojang.serialization.Codec;
-import dev.spiritstudios.spectre.api.client.model.animation.SpectreKeyframe;
-import dev.spiritstudios.spectre.api.core.math.MolangContext;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;

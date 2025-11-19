@@ -2,7 +2,6 @@ package dev.spiritstudios.spectre.api.client.model.animation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.spiritstudios.spectre.api.client.model.serial.LerpMode;
 import dev.spiritstudios.spectre.api.data.serialization.SpectreCodecs;
 
 import java.util.Optional;

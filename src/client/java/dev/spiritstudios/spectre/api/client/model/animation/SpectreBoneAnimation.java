@@ -5,15 +5,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.spiritstudios.spectre.api.client.model.Bone;
 import dev.spiritstudios.spectre.api.client.model.BoneState;
-import dev.spiritstudios.spectre.api.client.model.serial.ActorAnimation;
-import dev.spiritstudios.spectre.api.core.math.MolangContext;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 import dev.spiritstudios.spectre.api.core.math.Query;
+import net.minecraft.SharedConstants;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.AnimationState;
 
 public record SpectreBoneAnimation(
 	String bone,
@@ -39,25 +37,9 @@ public record SpectreBoneAnimation(
 		).apply(instance, (pos, rot, sca) -> new SpectreBoneAnimation(key, pos, rot, sca)));
 	}
 
-	public void update(BoneState state, Bone bone, ActorAnimation animation, Query query, AnimationState animationState, float age) {
-		this.update(state, bone, animation, query, animationState, age, 1.0F);
-	}
-
-	public void update(
-		BoneState boneState,
-		Bone bone,
-		ActorAnimation animation,
-		Query query,
-		AnimationState animationState,
-		float age,
-		float speedMultiplier
-	) {
-		animationState.ifStarted(state -> this.update(boneState, bone, animation, query, (long) ((float) state.getTimeInMillis(age) * speedMultiplier), 1.0F));
-	}
-
-	private float getRunningSeconds(long timeInMilliseconds, LoopType loopType, float length) {
-		float f = (float) timeInMilliseconds / 1000.0F;
-		return loopType == LoopType.TRUE ? f % length : f;
+	private float getRunningSeconds(float startTick, LoopType loopType, float length) {
+		float seconds =  (startTick / SharedConstants.TICKS_PER_SECOND);
+		return loopType == LoopType.TRUE ? seconds % length : seconds;
 	}
 
 	public void update(
@@ -65,10 +47,13 @@ public record SpectreBoneAnimation(
 		Bone bone,
 		ActorAnimation animation,
 		Query query,
-		long timeInMilliseconds,
-		float scale
+		float runningTicks,
+		float scale,
+		float transitionProgress
 	) {
-		float seconds = this.getRunningSeconds(timeInMilliseconds, animation.loop(), animation.length());
+		float seconds = this.getRunningSeconds(runningTicks, animation.loop(), animation.length());
+
+		System.out.println(seconds);
 
 		state.offset().set(0F);
 		state.pivot().set(bone.pivot);
@@ -80,6 +65,7 @@ public record SpectreBoneAnimation(
 			animation.loop(),
 			seconds,
 			scale,
+			transitionProgress,
 			state.offset()
 		);
 
@@ -88,6 +74,7 @@ public record SpectreBoneAnimation(
 			animation.loop(),
 			seconds,
 			scale * Mth.DEG_TO_RAD,
+			transitionProgress,
 			state.rotation()
 		);
 
@@ -96,6 +83,7 @@ public record SpectreBoneAnimation(
 			animation.loop(),
 			seconds,
 			scale,
+			transitionProgress,
 			state.scale()
 		);
 	}

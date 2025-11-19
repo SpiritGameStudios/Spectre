@@ -1,9 +1,8 @@
-package dev.spiritstudios.spectre.api.client.model.serial;
+package dev.spiritstudios.spectre.impl.client.serial;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 import java.util.Optional;
 import net.minecraft.util.ExtraCodecs;
