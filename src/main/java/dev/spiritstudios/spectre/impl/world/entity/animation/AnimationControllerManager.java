@@ -8,8 +8,10 @@ import dev.spiritstudios.mojank.meow.analysis.AnalysisResult;
 import dev.spiritstudios.mojank.meow.compile.CompilerFactory;
 import dev.spiritstudios.mojank.meow.compile.Linker;
 import dev.spiritstudios.spectre.api.core.MolangMath;
+import dev.spiritstudios.spectre.api.core.collect.WeakSet;
 import dev.spiritstudios.spectre.api.core.math.MolangExpression;
 import dev.spiritstudios.spectre.api.core.math.Query;
+import dev.spiritstudios.spectre.api.world.entity.animation.AnimationController;
 import dev.spiritstudios.spectre.api.world.entity.animation.BooleanExpression;
 import dev.spiritstudios.spectre.impl.serialization.CompilerOps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AnimationControllerManager extends SimpleResourceReloader<Map<ResourceLocation, Map<String, AnimationControllerDesc>>> {
+	public static final WeakSet<AnimationController> CONTROLLERS = new WeakSet<>();
+
 	public static final AnimationControllerManager INSTANCE = new AnimationControllerManager();
 
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -81,7 +85,7 @@ public class AnimationControllerManager extends SimpleResourceReloader<Map<Resou
 				try (Reader reader = resource.openAsReader()) {
 					AnimationControllersJson.CODEC.parse(ops, StrictJsonParser.parse(reader))
 						.ifSuccess(controllers -> value.putAll(controllers.controllers()))
-						.ifError(error -> LOGGER.error("Couldn't parse animations controller file '{}': {}", id, error));
+						.ifError(error -> LOGGER.error("Couldn't parse animation controllers file '{}': {}", id, error));
 				} catch (IllegalArgumentException | IOException | JsonParseException error) {
 					LOGGER.error("Couldn't parse animation controller file '{}': {}", id, error);
 				}
@@ -95,5 +99,9 @@ public class AnimationControllerManager extends SimpleResourceReloader<Map<Resou
 	protected void apply(Map<ResourceLocation, Map<String, AnimationControllerDesc>> prepared, SharedState store) {
 		controllers.clear();
 		controllers.putAll(prepared);
+
+		for (AnimationController controller : CONTROLLERS) {
+			controller.transition(prepared.get(controller.location).get(controller.name).bake());
+		}
 	}
 }

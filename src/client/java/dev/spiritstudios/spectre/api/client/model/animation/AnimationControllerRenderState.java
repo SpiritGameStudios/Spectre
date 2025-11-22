@@ -19,20 +19,16 @@ public class AnimationControllerRenderState {
 	public void copyFrom(AnimationController controller) {
 		this.previousState = controller.getPreviousState();
 		this.state = controller.getState();
-		this.transitionStartTick = controller.getTransitionStartTick();
+		this.transitionStartTick = controller.getAnimStartTick();
 		this.prevStartTick = controller.getPrevStartTick();
 	}
 
 	public void apply(Bone bone, BoneState boneState, Map<String, ActorAnimation> animations, Query query, float time) {
 		float stateTime = (time - transitionStartTick);
 		float transitionProgress = previousState == null ? 1F :
-			stateTime < previousState.transitionLength() * SharedConstants.TICKS_PER_SECOND ?
-				stateTime / (previousState.transitionLength() * SharedConstants.TICKS_PER_SECOND) :
-				1F;
+			Math.min(stateTime / (previousState.transitionLength() * SharedConstants.TICKS_PER_SECOND), 1F);
 
-		System.out.println("trans: " + transitionProgress);
-
-		if (transitionProgress < 1F) {
+		if (transitionProgress != 1f) {
 			for (String animationName : previousState.animations()) {
 				var animation = animations.get(animationName);
 
@@ -44,11 +40,9 @@ public class AnimationControllerRenderState {
 
 				boneAnim.update(
 					boneState,
-					bone,
 					animation,
 					query,
 					time - prevStartTick,
-					1F,
 					1F - transitionProgress
 				);
 			}
@@ -65,11 +59,9 @@ public class AnimationControllerRenderState {
 
 			boneAnim.update(
 				boneState,
-				bone,
 				animation,
 				query,
 				time - transitionStartTick,
-				1F,
 				transitionProgress
 			);
 		}

@@ -66,12 +66,11 @@ public record SpectreTransformation(SpectreKeyframe... keyframes) {
 
 	private static final Logger LOGGER = LogManager.getLogger(SpectreTransformation.class);
 
-	public void apply(
+	public void evaluate(
 		Query query,
 		LoopType loop,
 		float runningSeconds,
 		float scale,
-		float transitionProgress,
 		Vector3f destination
 	) {
 		if (keyframes.length == 0) return;
@@ -114,12 +113,8 @@ public record SpectreTransformation(SpectreKeyframe... keyframes) {
 
 		query.anim_time = runningSeconds;
 
-		if (transitionProgress >= 1F) {
-			endFrame.lerpMode().apply(query, destination, delta, this.keyframes, start, end, scale);
-		} else {
-			var v = new Vector3f();
-			endFrame.lerpMode().apply(query, v, delta, this.keyframes, start, end, scale);
-			destination.lerp(v, transitionProgress, destination);
-		}
+		var res = endFrame.lerpMode().apply(query, delta, this.keyframes, start, end, scale);
+
+		destination.add(res);
 	}
 }

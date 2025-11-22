@@ -10,7 +10,7 @@ public class SpectreTestmodClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		EntityRenderers.register(
 			SpectreTestmod.BLOBABO,
-			(ctx) -> new BlobaboRenderer(ctx, 1f)
+			BlobaboRenderer::new
 		);
 
 

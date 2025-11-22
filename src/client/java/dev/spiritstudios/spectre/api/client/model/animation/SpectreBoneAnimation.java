@@ -44,46 +44,34 @@ public record SpectreBoneAnimation(
 
 	public void update(
 		BoneState state,
-		Bone bone,
 		ActorAnimation animation,
 		Query query,
 		float runningTicks,
-		float scale,
-		float transitionProgress
+		float scale
 	) {
 		float seconds = this.getRunningSeconds(runningTicks, animation.loop(), animation.length());
 
-		System.out.println(seconds);
-
-		state.offset().set(0F);
-		state.pivot().set(bone.pivot);
-		state.rotation().set(bone.rotation);
-		state.scale().set(1F);
-
-		positionKeyframes.apply(
+		positionKeyframes.evaluate(
 			query,
 			animation.loop(),
 			seconds,
 			scale,
-			transitionProgress,
 			state.offset()
 		);
 
-		rotationKeyframes.apply(
+		rotationKeyframes.evaluate(
 			query,
 			animation.loop(),
 			seconds,
 			scale * Mth.DEG_TO_RAD,
-			transitionProgress,
 			state.rotation()
 		);
 
-		scaleKeyframes.apply(
+		scaleKeyframes.evaluate(
 			query,
 			animation.loop(),
 			seconds,
 			scale,
-			transitionProgress,
 			state.scale()
 		);
 	}

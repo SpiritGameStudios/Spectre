@@ -25,18 +25,13 @@ public class SpectreModelManager extends SimpleJsonResourceReloadListener<GeoJso
 		super(GeoJson.CODEC, LISTER);
 	}
 
-	public final Map<ResourceLocation, Map<String, SpectreModel>> models = new Object2ObjectOpenHashMap<>();
+	public final Map<ResourceLocation, SpectreModel> models = new Object2ObjectOpenHashMap<>();
 
 	@Override
 	protected void apply(Map<ResourceLocation, GeoJson> prepared, ResourceManager manager, ProfilerFiller profiler) {
 		models.clear();
 
 		prepared.forEach((id, geoJson) -> {
-			Map<String, SpectreModel> map = models.computeIfAbsent(
-				id,
-				k -> new Object2ObjectOpenHashMap<>()
-			);
-
 			for (MinecraftGeometry geometry : geoJson.geometry()) {
 				var nameToBone = geometry.bones()
 					.stream()
@@ -78,8 +73,8 @@ public class SpectreModelManager extends SimpleJsonResourceReloadListener<GeoJso
 						);
 				}
 
-				map.put(
-					geometry.description().id(),
+				models.put(
+					id.withSuffix("/" + geometry.description().id()),
 					new SpectreModel(
 						bones,
 						root

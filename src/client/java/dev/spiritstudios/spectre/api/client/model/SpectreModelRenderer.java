@@ -2,17 +2,119 @@ package dev.spiritstudios.spectre.api.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.spiritstudios.spectre.impl.Spectre;
-import org.joml.Quaternionf;
+import dev.spiritstudios.spectre.api.client.model.animation.AnimationControllerRenderState;
+import dev.spiritstudios.spectre.api.core.math.Query;
+import dev.spiritstudios.spectre.impl.client.SpectreClient;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector3f;
 
 import java.util.function.BiConsumer;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+public final class SpectreModelRenderer {
 
-public class SpectreModelRenderer {
-	public static void render(PoseStack.Pose pose, VertexConsumer consumer, int overlay, int light, SpectreCuboid cuboid) {
+	public static void render(
+		PoseStack poseStack,
+		SubmitNodeCollector nodeCollector,
+		RenderType renderType,
+		int packedLight,
+		int packedOverlay,
+		int tintColor,
+		Query query,
+		float ageInTicks,
+		ResourceLocation modelLocation,
+		ResourceLocation animationsLocation,
+		AnimationControllerRenderState... controllers
+	) {
+		var animations = SpectreClient.ANIMATION_MANAGER.animations.get(animationsLocation);
+
+		render(
+			poseStack,
+			nodeCollector,
+			renderType,
+			packedLight,
+			packedOverlay,
+			tintColor,
+			modelLocation,
+			(bone, state) -> {
+				for (AnimationControllerRenderState controller : controllers) {
+					controller.apply(
+						bone,
+						state,
+						animations,
+						query,
+						ageInTicks
+					);
+				}
+			}
+		);
+	}
+
+	public static void render(
+		PoseStack poseStack,
+		SubmitNodeCollector nodeCollector,
+		RenderType renderType,
+		int packedLight,
+		int packedOverlay,
+		int tintColor,
+		ResourceLocation modelLocation,
+		BiConsumer<Bone, BoneState> applyAnimations
+	) {
+		var model = SpectreClient.MODEL_MANAGER.models.get(modelLocation);
+
+		render(
+			poseStack,
+			nodeCollector,
+			renderType,
+			packedLight,
+			packedOverlay,
+			tintColor,
+			model,
+			applyAnimations
+		);
+	}
+
+	public static void render(
+		PoseStack poseStack,
+		SubmitNodeCollector nodeCollector,
+		RenderType renderType,
+		int packedLight,
+		int packedOverlay,
+		int tintColor,
+		SpectreModel model,
+		BiConsumer<Bone, BoneState> applyAnimations
+	) {
+		var boneState = new BoneState(
+			new Vector3f(),
+			new Vector3f(),
+			new Vector3f(),
+			new Vector3f()
+		);
+
+		for (Bone bone : model.rootBones()) {
+			SpectreModelRenderer.render(
+				poseStack,
+				nodeCollector,
+				renderType,
+				packedLight,
+				packedOverlay,
+				tintColor,
+				bone,
+				boneState,
+				applyAnimations
+			);
+		}
+	}
+
+	public static void render(
+		PoseStack.Pose pose,
+		VertexConsumer consumer,
+		int packedLight,
+		int packedOverlay,
+		int tintColor,
+		SpectreCuboid cuboid
+	) {
 		for (SpectreCuboid.Quad quad : cuboid.quads()) {
 			var normal = pose.transformNormal(
 				quad.normal(),
@@ -27,10 +129,10 @@ public class SpectreModelRenderer {
 
 				consumer.addVertex(
 					pos.x, pos.y, pos.z,
-					0xFFFFFFFF,
+					tintColor,
 					vertex.u(), vertex.v(),
-					overlay,
-					light,
+					packedOverlay,
+					packedLight,
 					normal.x, normal.y, normal.z
 				);
 			}
@@ -41,13 +143,19 @@ public class SpectreModelRenderer {
 		PoseStack poseStack,
 		SubmitNodeCollector queue,
 		RenderType renderType,
-		int overlay,
-		int light,
+		int packedLight,
+		int packedOverlay,
+		int tintColor,
 		Bone bone,
 		BoneState state,
 		BiConsumer<Bone, BoneState> applyAnimations
 	) {
 		state.set(bone);
+
+		state.offset().set(0F);
+		state.pivot().set(bone.pivot);
+		state.rotation().set(bone.rotation);
+		state.scale().set(1F);
 
 		applyAnimations.accept(bone, state);
 
@@ -57,12 +165,12 @@ public class SpectreModelRenderer {
 
 			for (SpectreCuboid cuboid : bone.cuboids) {
 				queue.submitCustomGeometry(poseStack, renderType, (entry, vertexConsumer) -> {
-					render(entry, vertexConsumer, overlay, light, cuboid);
+					render(entry, vertexConsumer, packedLight, packedOverlay, tintColor, cuboid);
 				});
 			}
 
 			for (Bone child : bone.children) {
-				render(poseStack, queue, renderType, overlay, light, child, state, applyAnimations);
+				render(poseStack, queue, renderType, packedLight, packedOverlay, tintColor, child, state, applyAnimations);
 			}
 		}
 		poseStack.popPose();

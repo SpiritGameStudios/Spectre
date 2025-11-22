@@ -26,19 +26,21 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 	public final AnimationController movement;
 	public final AnimationController antenna;
 
+	private final Query query = new Query();
+
 	public Blobabo(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 
 		movement = AnimationController.create(
 			Spectre.id("bloomray"),
 			"controller.animation.bloomray.movement",
-			tickCount
+			this
 		);
 
 		antenna = AnimationController.create(
 			Spectre.id("bloomray"),
 			"controller.animation.bloomray.antenna",
-			tickCount
+			this
 		);
 	}
 
@@ -63,10 +65,9 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 	public void tick() {
 		super.tick();
 
-		var query = Query.of(this);
-		query.is_swimming = swimming;
+		query.set(this, 0F);
 
-		movement.tick(query, tickCount);
-		antenna.tick(query, tickCount);
+		movement.tick(query);
+		antenna.tick(query);
 	}
 }
