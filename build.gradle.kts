@@ -91,7 +91,7 @@ repositories {
 
 	maven {
 		name = "Spirit Studios Releases"
-		url = uri("https://maven.spiritstudios.dev/releases/")
+		url = uri("https://maven.spiritstudios.dev/snapshots/")
 
 		content {
 			@Suppress("UnstableApiUsage")
@@ -109,7 +109,7 @@ repositories {
 		}
 	}
 
-	mavenLocal()
+//	mavenLocal()
 }
 
 dependencies {

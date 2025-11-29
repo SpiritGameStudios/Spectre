@@ -1,6 +1,6 @@
 package dev.spiritstudios.spectre.api.core;
 
-import dev.spiritstudios.mojank.meow.binding.Pure;
+import dev.spiritstudios.mojank.meow.link.Pure;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.NotImplementedException;
 

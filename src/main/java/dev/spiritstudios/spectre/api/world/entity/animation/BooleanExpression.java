@@ -3,7 +3,7 @@ package dev.spiritstudios.spectre.api.world.entity.animation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import dev.spiritstudios.mojank.meow.Variables;
-import dev.spiritstudios.mojank.meow.binding.Alias;
+import dev.spiritstudios.mojank.meow.link.Alias;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.impl.serialization.CompilingCodec;
 
