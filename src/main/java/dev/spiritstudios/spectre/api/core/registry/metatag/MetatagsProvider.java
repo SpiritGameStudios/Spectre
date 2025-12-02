@@ -9,7 +9,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -38,7 +38,7 @@ public abstract class MetatagsProvider<K> implements DataProvider {
 	) {
 		this.pathProvider = output.createPathProvider(
 			PackOutput.Target.DATA_PACK,
-			"metatags/" + registry.location().getNamespace() + "/" + registry.location().getPath()
+			"metatags/" + registry.identifier().getNamespace() + "/" + registry.identifier().getPath()
 		);
 		this.registry = registry;
 		this.lookupProvider = lookupProvider;
@@ -55,7 +55,7 @@ public abstract class MetatagsProvider<K> implements DataProvider {
 
 	@Override
 	public @NotNull String getName() {
-		return "Metatags for " + this.registry.location();
+		return "Metatags for " + this.registry.identifier();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public abstract class MetatagsProvider<K> implements DataProvider {
 		MetatagKey<K, V> key = (MetatagKey<K, V>) entry.getKey();
 		MetatagBuilder<K, V> builder = (MetatagBuilder<K, V>) entry.getValue();
 
-		ResourceLocation metatagLocation = SpectreRegistries.METATAG.getKey(key);
+		Identifier metatagLocation = SpectreRegistries.METATAG.getKey(key);
 
 		Path path = this.pathProvider.json(metatagLocation);
 

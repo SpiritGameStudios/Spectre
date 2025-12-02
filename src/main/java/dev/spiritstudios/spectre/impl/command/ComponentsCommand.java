@@ -22,7 +22,7 @@ public final class ComponentsCommand {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("components")
-				.requires(source -> source.hasPermission(2))
+				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.executes(context -> components(Objects.requireNonNull(context.getSource().getPlayer()).getMainHandItem(), context.getSource()))
 				.then(Commands.argument("target", EntityArgument.player())
 						.executes(context -> components(EntityArgument.getPlayer(context, "target").getMainHandItem(), context.getSource()))

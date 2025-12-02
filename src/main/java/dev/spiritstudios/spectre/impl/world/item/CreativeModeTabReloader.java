@@ -26,7 +26,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
@@ -43,8 +43,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<ResourceLocation, List<JsonElement>>> {
-	public static final ResourceLocation ID = Spectre.id("creative_mode_tabs");
+public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Identifier, List<JsonElement>>> {
+	public static final Identifier ID = Spectre.id("creative_mode_tabs");
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final FileToIdConverter LISTER = FileToIdConverter.json("spectre/creative_mode_tabs");
@@ -58,7 +58,7 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 		);
 
 		ResourceLoader.get(PackType.SERVER_DATA).addReloaderOrdering(
-			ResourceLocation.fromNamespaceAndPath("fabric-tag-api-v1", "tag_alias_groups"),
+			Identifier.fromNamespaceAndPath("fabric-tag-api-v1", "tag_alias_groups"),
 			ID
 		);
 	}
@@ -72,12 +72,12 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 	}
 
 	@Override
-	protected Map<ResourceLocation, List<JsonElement>> prepare(SharedState store) {
-		Map<ResourceLocation, List<JsonElement>> output = new Object2ObjectOpenHashMap<>();
+	protected Map<Identifier, List<JsonElement>> prepare(SharedState store) {
+		Map<Identifier, List<JsonElement>> output = new Object2ObjectOpenHashMap<>();
 
-		for (Map.Entry<ResourceLocation, List<Resource>> entry : LISTER.listMatchingResourceStacks(store.resourceManager()).entrySet()) {
-			ResourceLocation fileId = entry.getKey();
-			ResourceLocation id = LISTER.fileToId(fileId);
+		for (Map.Entry<Identifier, List<Resource>> entry : LISTER.listMatchingResourceStacks(store.resourceManager()).entrySet()) {
+			Identifier fileId = entry.getKey();
+			Identifier id = LISTER.fileToId(fileId);
 
 			for (Resource resource : entry.getValue()) {
 				try (Reader reader = resource.openAsReader()) {
@@ -92,7 +92,7 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 		return output;
 	}
 
-	public static void apply(Map<ResourceLocation, CreativeModeTabFile> tabs) {
+	public static void apply(Map<Identifier, CreativeModeTabFile> tabs) {
 		if (!(BuiltInRegistries.CREATIVE_MODE_TAB instanceof MappedRegistry<CreativeModeTab> registry)) {
 			throw new IllegalStateException("Creative mode tab registry is not a MappedRegistry. This is likely caused by a mod incompatibility. Please report this to Spirit Studios.");
 		}
@@ -139,11 +139,11 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, List<JsonElement>> prepared, SharedState store) {
+	protected void apply(Map<Identifier, List<JsonElement>> prepared, SharedState store) {
 		HolderLookup.Provider registries = store.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY);
 		var ops = registries.createSerializationContext(JsonOps.INSTANCE);
 
-		Map<ResourceLocation, CreativeModeTabFile> files = new Object2ObjectOpenHashMap<>(prepared.size());
+		Map<Identifier, CreativeModeTabFile> files = new Object2ObjectOpenHashMap<>(prepared.size());
 
 		prepared.forEach((id, jsons) -> {
 			for (JsonElement json : jsons) {
@@ -156,7 +156,7 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Re
 			}
 		});
 
-		for (Map.Entry<ResourceLocation, CreativeModeTabFile> entry : files.entrySet()) {
+		for (Map.Entry<Identifier, CreativeModeTabFile> entry : files.entrySet()) {
 			var tab = entry.getValue();
 			var id = entry.getKey();
 

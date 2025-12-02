@@ -16,7 +16,7 @@ import dev.spiritstudios.spectre.impl.serialization.CompilerOps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.StrictJsonParser;
 import net.minecraft.world.phys.Vec3;
@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-public class AnimationControllerManager extends SimpleResourceReloader<Map<ResourceLocation, Map<String, AnimationControllerDesc>>> {
+public class AnimationControllerManager extends SimpleResourceReloader<Map<Identifier, Map<String, AnimationControllerDesc>>> {
 	public static final Set<AnimationController> CONTROLLERS = Collections.newSetFromMap(new WeakHashMap<>());
 
 	public static final AnimationControllerManager INSTANCE = new AnimationControllerManager();
@@ -64,10 +64,10 @@ public class AnimationControllerManager extends SimpleResourceReloader<Map<Resou
 
 	public static final FileToIdConverter LISTER = new FileToIdConverter("spectre/animation_controllers", ".animation_controllers.json");
 
-	public final Map<ResourceLocation, Map<String, AnimationControllerDesc>> controllers = new Object2ObjectOpenHashMap<>();
+	public final Map<Identifier, Map<String, AnimationControllerDesc>> controllers = new Object2ObjectOpenHashMap<>();
 
 	@Override
-	protected Map<ResourceLocation, Map<String, AnimationControllerDesc>> prepare(SharedState store) {
+	protected Map<Identifier, Map<String, AnimationControllerDesc>> prepare(SharedState store) {
 		var resources = LISTER.listMatchingResourceStacks(store.resourceManager());
 
 		var compiler = FACTORY.build(new AnalysisResult(
@@ -77,9 +77,9 @@ public class AnimationControllerManager extends SimpleResourceReloader<Map<Resou
 
 		var ops = new CompilerOps<>(JsonOps.INSTANCE, compiler, BooleanExpression.class);
 
-		Map<ResourceLocation, Map<String, AnimationControllerDesc>> results = new HashMap<>();
+		Map<Identifier, Map<String, AnimationControllerDesc>> results = new HashMap<>();
 
-		for (Map.Entry<ResourceLocation, List<Resource>> entry : resources.entrySet()) {
+		for (Map.Entry<Identifier, List<Resource>> entry : resources.entrySet()) {
 			var id = LISTER.fileToId(entry.getKey());
 			var value = results.computeIfAbsent(id, k -> new HashMap<>());
 
@@ -98,7 +98,7 @@ public class AnimationControllerManager extends SimpleResourceReloader<Map<Resou
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, Map<String, AnimationControllerDesc>> prepared, SharedState store) {
+	protected void apply(Map<Identifier, Map<String, AnimationControllerDesc>> prepared, SharedState store) {
 		controllers.clear();
 		controllers.putAll(prepared);
 

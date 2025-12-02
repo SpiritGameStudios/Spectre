@@ -6,15 +6,15 @@ import com.mojang.serialization.JsonOps;
 import dev.spiritstudios.mojank.meow.Variables;
 import dev.spiritstudios.mojank.meow.analysis.AnalysisResult;
 import dev.spiritstudios.mojank.meow.compile.CompilerFactory;
-import dev.spiritstudios.mojank.meow.compile.Linker;
+import dev.spiritstudios.mojank.meow.link.Linker;
 import dev.spiritstudios.spectre.api.client.model.animation.ActorAnimation;
+import dev.spiritstudios.spectre.api.core.MolangMath;
 import dev.spiritstudios.spectre.api.core.math.MolangExpression;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.impl.client.serial.AnimationJson;
 import dev.spiritstudios.spectre.impl.serialization.CompilerOps;
-import dev.spiritstudios.spectre.api.core.MolangMath;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.StrictJsonParser;
@@ -56,7 +56,7 @@ public class AnimationLoader {
 
 	public static final FileToIdConverter LISTER = new FileToIdConverter("spectre/animations", ".animation.json");
 
-	public static Map<ResourceLocation, Map<String, ActorAnimation>> load(ResourceManager manager) {
+	public static Map<Identifier, Map<String, ActorAnimation>> load(ResourceManager manager) {
 		var resources = LISTER.listMatchingResourceStacks(manager);
 
 		var compiler = FACTORY.build(new AnalysisResult(
@@ -66,9 +66,9 @@ public class AnimationLoader {
 
 		var ops = new CompilerOps<>(JsonOps.INSTANCE, compiler, MolangExpression.class);
 
-		Map<ResourceLocation, Map<String, ActorAnimation>> results = new HashMap<>();
+		Map<Identifier, Map<String, ActorAnimation>> results = new HashMap<>();
 
-		for (Map.Entry<ResourceLocation, List<Resource>> entry : resources.entrySet()) {
+		for (Map.Entry<Identifier, List<Resource>> entry : resources.entrySet()) {
 			var id = LISTER.fileToId(entry.getKey());
 			var value = results.computeIfAbsent(id, k -> new HashMap<>());
 

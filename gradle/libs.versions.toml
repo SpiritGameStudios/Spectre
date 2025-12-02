@@ -1,11 +1,11 @@
 [versions]
-fabric_loom = "1.12-SNAPSHOT"
+fabric_loom = "1.13-SNAPSHOT"
 
-minecraft = "1.21.10"
+minecraft = "1.21.11-pre3"
 parchment = "2025.10.12"
 
-fabric_loader = "0.17.3"
-fabric_api = "0.138.0+1.21.10"
+fabric_loader = "0.18.1"
+fabric_api = "0.139.3+1.21.11"
 
 mojank = "1.0.0-SNAPSHOT2"
 

@@ -1,6 +1,5 @@
 package dev.spiritstudios.spectre.api.core.registry;
 
-import java.util.concurrent.CompletableFuture;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
@@ -8,6 +7,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
 
 public abstract class AutomaticDynamicRegistryProvider<T> extends FabricDynamicRegistryProvider {
 	private final ResourceKey<Registry<T>> registryKey;
@@ -24,7 +25,7 @@ public abstract class AutomaticDynamicRegistryProvider<T> extends FabricDynamicR
 		HolderLookup<T> wrapper = wrapperLookup.lookupOrThrow(registryKey);
 
 		wrapper.listElementIds()
-				.filter(key -> key.location().getNamespace().equals(namespace))
+				.filter(key -> key.identifier().getNamespace().equals(namespace))
 				.forEach(key -> entries.add(key, wrapper.getOrThrow(key).value()));
 	}
 
@@ -32,7 +33,7 @@ public abstract class AutomaticDynamicRegistryProvider<T> extends FabricDynamicR
 		return (output, registriesFuture) -> new AutomaticDynamicRegistryProvider<>(output, registriesFuture, registryKey, namespace) {
 			@Override
 			public @NotNull String getName() {
-				return "Dynamic Registry Entries for " + registryKey.location();
+				return "Dynamic Registry Entries for " + registryKey.identifier();
 			}
 		};
 	}

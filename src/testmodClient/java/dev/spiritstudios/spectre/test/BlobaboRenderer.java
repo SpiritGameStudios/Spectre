@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntityRenderState, EntityModel<BlobaboEntityRenderState>> {
@@ -19,7 +19,7 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 	}
 
 	@Override
-	public @NotNull ResourceLocation getTextureLocation(BlobaboEntityRenderState state) {
+	public @NotNull Identifier getTextureLocation(BlobaboEntityRenderState state) {
 		return Spectre.id("textures/entity/bloomray.png");
 	}
 

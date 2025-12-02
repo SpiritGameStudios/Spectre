@@ -36,7 +36,7 @@ public abstract class LevelMixin implements EntityPartLevel {
 			CallbackInfoReturnable<AbortableIterationConsumer.Continuation> cir
 	) {
 		if (entity instanceof PartHolder<?> partHolder) {
-			for (EntityPart<?> part : partHolder.getParts()) {
+			for (EntityPart<?> part : partHolder.getSubEntities()) {
 				T partCasted = filter.tryCast(part);
 
 				if (partCasted != null && predicate.test(partCasted)) {

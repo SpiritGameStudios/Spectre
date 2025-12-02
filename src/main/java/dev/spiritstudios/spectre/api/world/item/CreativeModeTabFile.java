@@ -15,7 +15,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.HolderSetCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.EggItem;
@@ -32,14 +32,14 @@ import java.util.function.Function;
 public record CreativeModeTabFile(
 	Optional<Component> title,
 	Optional<ItemStack> icon,
-	Optional<ResourceLocation> backgroundTexture,
+	Optional<Identifier> backgroundTexture,
 	boolean replace,
 	List<Either<ItemStack, HolderSet<Item>>> items
 ) implements CreativeModeTab.DisplayItemsGenerator {
 	public static final Codec<CreativeModeTabFile> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		ComponentSerialization.CODEC.optionalFieldOf("title").forGetter(CreativeModeTabFile::title),
 		ItemStack.SINGLE_ITEM_CODEC.optionalFieldOf("icon").forGetter(CreativeModeTabFile::icon),
-		ResourceLocation.CODEC.optionalFieldOf("background_texture").forGetter(CreativeModeTabFile::backgroundTexture),
+		Identifier.CODEC.optionalFieldOf("background_texture").forGetter(CreativeModeTabFile::backgroundTexture),
 		Codec.BOOL.optionalFieldOf("replace", false).forGetter(CreativeModeTabFile::replace),
 		Codec.either(
 			Codec.withAlternative(
@@ -57,7 +57,7 @@ public record CreativeModeTabFile(
 	public static final StreamCodec<RegistryFriendlyByteBuf, CreativeModeTabFile> STREAM_CODEC = StreamCodec.composite(
 		ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), CreativeModeTabFile::title,
 		ByteBufCodecs.optional(ItemStack.STREAM_CODEC), CreativeModeTabFile::icon,
-		ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), CreativeModeTabFile::backgroundTexture,
+		ByteBufCodecs.optional(Identifier.STREAM_CODEC), CreativeModeTabFile::backgroundTexture,
 		ByteBufCodecs.either(
 			ItemStack.STREAM_CODEC,
 			ByteBufCodecs.holderSet(Registries.ITEM)
@@ -99,7 +99,7 @@ public record CreativeModeTabFile(
 
 		private @Nullable Component title = null;
 		private @Nullable ItemStack icon = null;
-		private @Nullable ResourceLocation backgroundTexture = null;
+		private @Nullable Identifier backgroundTexture = null;
 		private boolean replace = false;
 		private List<Either<ItemStack, Either<HolderSet<Item>, TagKey<Item>>>> items = new ArrayList<>();
 
@@ -125,7 +125,7 @@ public record CreativeModeTabFile(
 			return icon(new ItemStack(icon));
 		}
 
-		public Builder backgroundTexture(ResourceLocation backgroundTexture) {
+		public Builder backgroundTexture(Identifier backgroundTexture) {
 			this.backgroundTexture = backgroundTexture;
 			return this;
 		}

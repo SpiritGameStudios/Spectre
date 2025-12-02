@@ -22,7 +22,7 @@ public abstract class ClientLevel$EntityCallbacksMixin {
 	@Inject(method = "onTrackingStart(Lnet/minecraft/world/entity/Entity;)V", at = @At("RETURN"))
 	private void startTracking(Entity entity, CallbackInfo ci) {
 		if (entity instanceof PartHolder<?> partHolder) {
-			for (EntityPart<?> part : partHolder.getParts()) {
+			for (EntityPart<?> part : partHolder.getSubEntities()) {
 				((EntityPartLevel) this.field_27735).specter$getParts().put(part.getId(), part);
 			}
 		}
@@ -31,7 +31,7 @@ public abstract class ClientLevel$EntityCallbacksMixin {
 	@Inject(method = "onTrackingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("RETURN"))
 	private void stopTracking(Entity entity, CallbackInfo ci) {
 		if (entity instanceof PartHolder<?> partHolder) {
-			for (EntityPart<?> part : partHolder.getParts()) {
+			for (EntityPart<?> part : partHolder.getSubEntities()) {
 				((EntityPartLevel) this.field_27735).specter$getParts().remove(part.getId(), part);
 			}
 		}

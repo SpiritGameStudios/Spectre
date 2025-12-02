@@ -9,28 +9,28 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.ExtraCodecs;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.Map;
 
 public record Cube(
-	Vector3f origin,
-	Vector3f size,
-	Vector3f rotation,
-	Vector3f pivot,
+	Vector3fc origin,
+	Vector3fc size,
+	Vector3fc rotation,
+	Vector3fc pivot,
 	float inflate,
 	boolean mirror,
-	Either<Vector2f, Map<Direction, Face>> uv
+	Either<Vector2fc, Map<Direction, Face>> uv
 ) {
 	public static final Codec<Cube> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		ExtraCodecs.VECTOR3F.optionalFieldOf("origin", new Vector3f(0F)).forGetter(Cube::origin),
 		ExtraCodecs.VECTOR3F.optionalFieldOf("size", new Vector3f(1F)).forGetter(Cube::size),
 		ModelCodecs.ROTATION_VECTOR.optionalFieldOf("rotation", new Vector3f(0F)).forGetter(Cube::rotation),
-		ExtraCodecs.VECTOR3F.xmap(
-			vec -> vec.mul(-1F, 1F, 1F),
-			vec -> vec.mul(-1F, 1F, 1F)
+		ExtraCodecs.VECTOR3F.<Vector3fc>xmap(
+			vec -> vec.mul(-1F, 1F, 1F, new Vector3f()),
+			vec -> vec.mul(-1F, 1F, 1F, new Vector3f())
 		).optionalFieldOf("pivot", new Vector3f(0F)).forGetter(Cube::pivot),
 		Codec.FLOAT.optionalFieldOf("inflate", 1F).forGetter(Cube::inflate),
 		Codec.BOOL.optionalFieldOf("mirror", false).forGetter(Cube::mirror),
@@ -51,13 +51,13 @@ public record Cube(
 
 	public void bake(CubeListBuilder builder, Vector3fc pivot) {
 		var pos = new Vector3f(
-			-(origin.x + size.x),
-			origin.y,
-			origin.z
+			-(origin.x() + size.x()),
+			origin.y(),
+			origin.z()
 		).sub(pivot).sub(this.pivot);
 		builder.mirror(mirror).addBox(
 			pos.x, pos.y, pos.z,
-			size.x, size.y, size.z,
+			size.x(), size.y(), size.z(),
 			new CubeDeformation(inflate() - 1F)
 		);
 	}

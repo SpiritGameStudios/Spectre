@@ -7,10 +7,12 @@
 		"screenshake.GameRendererMixin",
 		"screenshake.OptionsMixin",
 		"world.entity.ClientLevel$EntityCallbacksMixin",
+		"world.entity.EntityHitboxDebugRendererMixin",
 		"world.entity.EntityModelSetAccessor",
-		"world.entity.EntityRendererMixin",
 		"world.entity.LivingEntityRendererMixin",
-		"world.entity.ModelManagerMixin"
+		"world.entity.ModelManagerMixin",
+		"debug.ModelPartMixin",
+		"debug.PartDefinitionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

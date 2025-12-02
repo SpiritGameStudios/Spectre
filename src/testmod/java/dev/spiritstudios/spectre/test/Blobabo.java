@@ -45,13 +45,15 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 	}
 
 	@Override
-	public List<? extends EntityPart<Blobabo>> getParts() {
+	public List<? extends EntityPart<Blobabo>> getSubEntities() {
 		return parts;
 	}
 
 	@Override
 	public void aiStep() {
 		super.aiStep();
+
+		parts.getFirst().setOldPosAndRot();
 		parts.getFirst().setPos(parts.getFirst().relativePos.add(this.position()));
 	}
 

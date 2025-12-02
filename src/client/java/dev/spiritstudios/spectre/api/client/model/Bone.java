@@ -26,7 +26,8 @@ public class Bone {
 		this.rotation = rotation;
 	}
 
-	public void bake(PartDefinition parent) {
+	public void
+	bake(PartDefinition parent) {
 		var cubes = new CubeListBuilder();
 		List<Cube> deferred = new ArrayList<>();
 
@@ -53,11 +54,11 @@ public class Bone {
 			cuboid.bake(builder, pivot);
 
 			part.addOrReplaceChild(
-				"spectre:" + name + "_r" + i + "_",
+				"spectre:" + name + "_r" + i,
 				builder,
 				PartPose.offsetAndRotation(
-					cuboid.pivot().x, cuboid.pivot().y, cuboid.pivot().z,
-					cuboid.rotation().x, cuboid.rotation().y, cuboid.rotation().z
+					cuboid.pivot().x(), cuboid.pivot().y(), cuboid.pivot().z(),
+					cuboid.rotation().x(), cuboid.rotation().y(), cuboid.rotation().z()
 				)
 			);
 		}

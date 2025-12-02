@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.api.data.fixerupper;
 
 import java.util.Objects;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.datafix.fixes.References;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
@@ -14,7 +14,7 @@ public class BlockStateRenameFix extends DataFix {
 	private final String defaultValue;
 	private final String oldName, newName;
 
-	public BlockStateRenameFix(String name, ResourceLocation blockId, String oldName, String newName, String defaultValue, Schema outputSchema) {
+	public BlockStateRenameFix(String name, Identifier blockId, String oldName, String newName, String defaultValue, Schema outputSchema) {
 		super(outputSchema, false);
 		this.name = name;
 		this.defaultValue = defaultValue;

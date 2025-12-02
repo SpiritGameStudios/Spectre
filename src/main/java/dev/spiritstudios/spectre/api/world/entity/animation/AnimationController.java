@@ -2,13 +2,13 @@ package dev.spiritstudios.spectre.api.world.entity.animation;
 
 import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.impl.world.entity.animation.AnimationControllerManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public class AnimationController {
 
-	public static AnimationController create(ResourceLocation id, String name, Entity entity) {
+	public static AnimationController create(Identifier id, String name, Entity entity) {
 		var controllers = AnimationControllerManager.INSTANCE.controllers.get(id);
 		var desc = controllers.get(name);
 
@@ -24,7 +24,7 @@ public class AnimationController {
 		return controller;
 	}
 
-	public final ResourceLocation location;
+	public final Identifier location;
 	public final String name;
 
 	public final Entity entity;
@@ -36,7 +36,7 @@ public class AnimationController {
 	private long animStartTick;
 
 
-	public AnimationController(ResourceLocation location, String name, AnimationControllerState initialState, Entity entity) {
+	public AnimationController(Identifier location, String name, AnimationControllerState initialState, Entity entity) {
 		this.location = location;
 		this.name = name;
 		this.entity = entity;

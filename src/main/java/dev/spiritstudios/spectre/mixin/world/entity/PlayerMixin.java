@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin {
-	@ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 1)
-	private Entity attack(Entity value) {
-		return value instanceof EntityPart<?> part ? part.getOwner() : value;
+	@ModifyVariable(method = "attack", at = @At("HEAD"), argsOnly = true)
+	private Entity attack(Entity target) {
+		return target instanceof EntityPart<?> part ? part.getOwner() : target;
 	}
 }

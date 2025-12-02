@@ -15,7 +15,7 @@ import dev.spiritstudios.spectre.impl.serialization.CompilingCodec;
 import dev.spiritstudios.spectre.impl.serialization.FuzzyCodec;
 import dev.spiritstudios.spectre.impl.serialization.KeyDispatchingCodec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import org.joml.Vector4d;
 
 import java.util.List;

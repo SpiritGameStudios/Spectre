@@ -2,14 +2,15 @@ package dev.spiritstudios.spectre.impl.client.serial;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ExtraCodecs;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 import java.util.Optional;
-import net.minecraft.util.ExtraCodecs;
 
 public record Face(
-	Vector2f uv,
-	Vector2f uvSize,
+	Vector2fc uv,
+	Vector2fc uvSize,
 	int uvRotation,
 	Optional<String> material
 ) {

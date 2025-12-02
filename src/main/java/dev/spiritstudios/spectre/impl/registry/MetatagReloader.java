@@ -15,7 +15,7 @@ import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.StrictJsonParser;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MetatagReloader extends SimpleResourceReloader<List<MetatagContents<?, ?>>> {
-	public static final ResourceLocation ID = Spectre.id("metatags");
+	public static final Identifier ID = Spectre.id("metatags");
 
 	private MetatagSyncS2CPayload syncPayload;
 
@@ -53,7 +53,7 @@ public final class MetatagReloader extends SimpleResourceReloader<List<MetatagCo
 	private <K, V> MetatagContents<K, V> decodeMetatag(
 		RegistryOps<JsonElement> ops,
 		MetatagKey<K, V> metatag,
-		ResourceLocation metatagId,
+		Identifier metatagId,
 		List<Resource> resources
 	) {
 		var codec = MetatagFile.resourceCodecOf(metatag);
@@ -106,13 +106,13 @@ public final class MetatagReloader extends SimpleResourceReloader<List<MetatagCo
 
 		SpectreRegistries.METATAG.listElements().forEach(entry -> {
 			var metatag = entry.value();
-			var metatagId = entry.key().location();
+			var metatagId = entry.key().identifier();
 
-			ResourceLocation registryId = metatag.registry().location();
+			Identifier registryId = metatag.registry().identifier();
 
 			// eg. specter:metatags/minecraft/block/strippable.json
 			var resources = resourceManager.getResourceStack(
-				ResourceLocation.fromNamespaceAndPath(
+				Identifier.fromNamespaceAndPath(
 					metatagId.getNamespace(),
 					"metatags/" + registryId.getNamespace() + "/" + registryId.getPath() + "/" + metatagId.getPath() + ".json"
 				)

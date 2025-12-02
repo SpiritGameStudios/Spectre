@@ -12,7 +12,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.StrictJsonParser;
@@ -35,7 +35,7 @@ public class SpectreModelLoader {
 		var resources = LISTER.listMatchingResourceStacks(manager);
 		Map<ModelLayerLocation, LayerDefinition> results = new HashMap<>();
 
-		for (Map.Entry<ResourceLocation, List<Resource>> entry : resources.entrySet()) {
+		for (Map.Entry<Identifier, List<Resource>> entry : resources.entrySet()) {
 			var id = LISTER.fileToId(entry.getKey());
 
 			for (Resource resource : entry.getValue()) {

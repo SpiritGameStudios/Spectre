@@ -18,7 +18,7 @@ import static net.minecraft.commands.Commands.argument;
 public final class ScreenshakeCommand {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("screenshake")
-			.requires(source -> source.hasPermission(2))
+			.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(
 				argument("viewers", EntityArgument.players()).then(
 					argument("trauma", FloatArgumentType.floatArg(0F, 1F))

@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ public abstract class CreativeModeTabsProvider implements DataProvider {
 	private final CompletableFuture<HolderLookup.Provider> lookupProvider;
 	protected final PackOutput.PathProvider pathProvider;
 
-	private final Map<ResourceLocation, CreativeModeTabFile.Builder> builders = new Object2ObjectOpenHashMap<>();
+	private final Map<Identifier, CreativeModeTabFile.Builder> builders = new Object2ObjectOpenHashMap<>();
 
 	private HolderLookup.Provider lookup;
 
@@ -52,7 +52,7 @@ public abstract class CreativeModeTabsProvider implements DataProvider {
 
 	protected abstract void addCreativeModeTabs(HolderLookup.Provider lookup);
 
-	protected CreativeModeTabFile.Builder builder(ResourceLocation id) {
+	protected CreativeModeTabFile.Builder builder(Identifier id) {
 		return builders.computeIfAbsent(
 			id,
 			(k) -> new CreativeModeTabFile.Builder()

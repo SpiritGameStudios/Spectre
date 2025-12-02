@@ -3,13 +3,13 @@ package dev.spiritstudios.spectre.impl.client.serial;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
-import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public record GeometryDescription(
 	String id,
 	float visibleBoundsWidth,
 	float visibleBoundsHeight,
-	Vector3f visibleBoundsOffset,
+	Vector3fc visibleBoundsOffset,
 	int textureWidth,
 	int textureHeight
 ) {

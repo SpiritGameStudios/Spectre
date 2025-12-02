@@ -7,8 +7,8 @@ import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +23,7 @@ public abstract class MappedRegistryMixin<T> implements UnfrozenRegistry<T> {
 
 	@Shadow
 	@Final
-	private Map<ResourceLocation, Holder.Reference<T>> byLocation;
+	private Map<Identifier, Holder.Reference<T>> byLocation;
 
 	@Shadow
 	@Final
@@ -47,7 +47,7 @@ public abstract class MappedRegistryMixin<T> implements UnfrozenRegistry<T> {
 		T value = reference.value();
 
 		this.byKey.remove(key);
-		this.byLocation.remove(key.location());
+		this.byLocation.remove(key.identifier());
 		this.byValue.remove(value);
 		this.byId.remove(reference);
 		this.toId.removeInt(value);

@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.api.data.fixerupper;
 
 import java.util.Objects;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.datafix.fixes.BlockRenameFix;
 import net.minecraft.util.datafix.fixes.ItemRenameFix;
 import net.minecraft.util.datafix.fixes.SimplestEntityRenameFix;
@@ -13,7 +13,7 @@ public final class DataFixHelper {
 	public static void renameBlock(
 		DataFixerBuilder builder,
 		String fixName,
-		ResourceLocation oldId, ResourceLocation newId,
+		Identifier oldId, Identifier newId,
 		Schema schema
 	) {
 		builder.addFixer(BlockRenameFix.create(
@@ -30,7 +30,7 @@ public final class DataFixHelper {
 	public static void renameItem(
 		DataFixerBuilder builder,
 		String fixName,
-		ResourceLocation oldId, ResourceLocation newId,
+		Identifier oldId, Identifier newId,
 		Schema schema
 	) {
 		builder.addFixer(ItemRenameFix.create(
@@ -47,7 +47,7 @@ public final class DataFixHelper {
 	public static void renameEntity(
 			DataFixerBuilder builder,
 			String fixName,
-			ResourceLocation oldId, ResourceLocation newId,
+			Identifier oldId, Identifier newId,
 			Schema schema
 	) {
 		builder.addFixer(new SimplestEntityRenameFix(fixName, schema, false) {
@@ -64,7 +64,7 @@ public final class DataFixHelper {
 	public static void renameBlockState(
 			DataFixerBuilder builder,
 			String fixName,
-			ResourceLocation blockId,
+			Identifier blockId,
 			String oldState, String newState,
 			String defaultValue,
 			Schema schema
