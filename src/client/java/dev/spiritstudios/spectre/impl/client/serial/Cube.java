@@ -51,7 +51,7 @@ public record Cube(
 
 	public void bake(CubeListBuilder builder, Vector3fc pivot) {
 		var pos = new Vector3f(
-			-(origin.x() + size.x()),
+			origin.x(),
 			origin.y(),
 			origin.z()
 		).sub(pivot).sub(this.pivot);

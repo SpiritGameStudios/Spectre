@@ -23,7 +23,9 @@ public class ModelPartDebugRenderer {
 		final var textStyle = TextGizmo.Style.forColorAndCentered(color).withScale(0.1F);
 
 		Gizmos.point(partPos, color, 25F);
-		Gizmos.billboardText(name, partPos.add(0, 0.25, 0), textStyle);
+		Gizmos.billboardText(name, partPos.add(0, 0.35, 0), textStyle);
+		Gizmos.billboardText("Pos(" + part.x + " " + part.y + " " + part.z + ")", partPos.add(0, 0.25, 0), textStyle);
+		Gizmos.billboardText("Rot(" + part.xRot + " " + part.yRot + " " + part.zRot + ")", partPos.add(0, 0.15, 0), textStyle);
 
 		Gizmos.arrow(
 			partPos,
@@ -45,6 +47,15 @@ public class ModelPartDebugRenderer {
 			new Vec3(mat.transformPosition(min)),
 			new Vec3(mat.transformPosition(max))
 		);
+
+		var centre = aabb.getCenter();
+
+		final var textStyle = TextGizmo.Style.forColorAndCentered(color).withScale(0.1F);
+
+		Gizmos.billboardText("From(" + cube.minX + " " + cube.minY + " " + cube.minZ + ")", centre.add(0, 0.05F, 0), textStyle);
+		Gizmos.billboardText("To(" + cube.maxX + " " + cube.maxY + " " + cube.maxZ + ")", centre.subtract(0, 0.05, 0), textStyle);
+
+		Gizmos.point(centre, color, 5F);
 
 		Gizmos.cuboid(
 			aabb,

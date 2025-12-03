@@ -4,6 +4,8 @@ import dev.spiritstudios.spectre.impl.client.serial.Cube;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.ArrayList;
@@ -26,8 +28,7 @@ public class Bone {
 		this.rotation = rotation;
 	}
 
-	public void
-	bake(PartDefinition parent) {
+	public void bake(PartDefinition parent, @Nullable Bone parentBone) {
 		var cubes = new CubeListBuilder();
 		List<Cube> deferred = new ArrayList<>();
 
@@ -38,6 +39,9 @@ public class Bone {
 				cuboid.bake(cubes, pivot);
 			}
 		}
+
+		var origin = new Vector3f(pivot);
+		if (parentBone != null) origin.sub(parentBone.pivot);
 
 		var part = parent.addOrReplaceChild(
 			name,
@@ -64,7 +68,7 @@ public class Bone {
 		}
 
 		for (Bone child : children) {
-			child.bake(part);
+			child.bake(part, this);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package dev.spiritstudios.spectre.mixin.client.world.entity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.spiritstudios.spectre.impl.client.BloomrayModel;
 import dev.spiritstudios.spectre.impl.client.world.entity.render.SpectreModelLoader;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -33,6 +34,8 @@ public abstract class ModelManagerMixin {
 
 				Map<ModelLayerLocation, LayerDefinition> newRoots = new HashMap<>(((EntityModelSetAccessor) previous).getRoots());
 
+
+				final LayerDefinition TEST_DEF = BloomrayModel.createBodyLayer();
 				// data after so we can theoretically replace vanilla models
 				newRoots.putAll(data);
 

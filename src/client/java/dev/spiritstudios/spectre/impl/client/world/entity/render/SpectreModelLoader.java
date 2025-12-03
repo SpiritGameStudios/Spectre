@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import dev.spiritstudios.spectre.api.client.model.Bone;
 import dev.spiritstudios.spectre.impl.client.serial.GeoJson;
 import dev.spiritstudios.spectre.impl.client.serial.MinecraftGeometry;
-import dev.spiritstudios.spectre.impl.client.serial.ModelBone;
+import dev.spiritstudios.spectre.impl.client.serial.SerialBone;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class SpectreModelLoader {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -43,16 +41,10 @@ public class SpectreModelLoader {
 					GeoJson.CODEC.parse(JsonOps.INSTANCE, StrictJsonParser.parse(reader))
 						.ifSuccess(geo -> {
 							for (MinecraftGeometry geometry : geo.geometry()) {
-								var nameToBone = geometry.bones()
-									.stream()
-									.collect(Collectors.toMap(
-										ModelBone::name,
-										Function.identity()
-									));
 
 								Map<String, Bone> bones = new Object2ObjectOpenHashMap<>();
-								List<Bone> root = new ArrayList<>();
-								for (ModelBone bone : nameToBone.values()) {
+								List<Bone> rootBones = new ArrayList<>();
+								for (SerialBone bone : geometry.bones()) {
 									bones.put(bone.name(), new Bone(
 										bone.name(),
 										bone.cubes(),
@@ -61,7 +53,7 @@ public class SpectreModelLoader {
 									));
 								}
 
-								for (ModelBone bone : nameToBone.values()) {
+								for (SerialBone bone : geometry.bones()) {
 									bone.parent()
 										.ifPresentOrElse(
 											parentName -> {
@@ -70,14 +62,15 @@ public class SpectreModelLoader {
 
 												parent.children.add(child);
 											},
-											() -> root.add(bones.get(bone.name()))
+											() -> rootBones.add(bones.get(bone.name()))
 										);
 								}
 
 								var mesh = new MeshDefinition();
 								var rootPart = mesh.getRoot();
-								for (Bone bone : root) {
-									bone.bake(rootPart);
+
+								for (Bone bone : rootBones) {
+									bone.bake(rootPart, null);
 								}
 
 								results.put(
@@ -93,9 +86,9 @@ public class SpectreModelLoader {
 								);
 							}
 						})
-						.ifError(error -> LOGGER.error("Couldn't parse animations file '{}': {}", id, error));
+						.ifError(error -> LOGGER.error("Couldn't parse geometry file '{}': {}", id, error));
 				} catch (IllegalArgumentException | IOException | JsonParseException error) {
-					LOGGER.error("Couldn't parse animation file '{}': {}", id, error);
+					LOGGER.error("Couldn't parse geometry file '{}': {}", id, error);
 				}
 			}
 		}
