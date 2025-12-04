@@ -1,7 +1,6 @@
 package dev.spiritstudios.spectre.test;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.spiritstudios.spectre.impl.Spectre;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -45,7 +44,7 @@ public class EntityDisplayRenderer extends DisplayRenderer<EntityDisplay, Entity
 		submitNodeCollector.submitModelPart(
 			part,
 			poseStack,
-			RenderTypes.entityCutoutNoCull(Spectre.id("invalid")),
+			RenderTypes.entityCutoutNoCull(state.state.texture()),
 			state.lightCoords,
 			OverlayTexture.NO_OVERLAY,
 			null

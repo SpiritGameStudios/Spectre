@@ -11,10 +11,12 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 public class EntityDisplay extends Display {
-	public static final String TAG_BLOCK_STATE = "block_state";
-	private static final EntityDataAccessor<Identifier> STATE_ID = SynchedEntityData.defineId(
-		EntityDisplay.class, SpectreTestmod.ENTITY_MODEL
-	);
+	public static final String TAG_MODEL = "model";
+	public static final String TAG_TEXTURE = "texture";
+
+	private static final EntityDataAccessor<Identifier> MODEL = SynchedEntityData.defineId(EntityDisplay.class, SpectreTestmod.IDENTIFIER);
+	private static final EntityDataAccessor<Identifier> TEXTURE = SynchedEntityData.defineId(EntityDisplay.class, SpectreTestmod.IDENTIFIER);
+
 
 	private @Nullable RenderState state;
 
@@ -25,35 +27,44 @@ public class EntityDisplay extends Display {
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
-		builder.define(STATE_ID, Identifier.withDefaultNamespace("zombie/main"));
+		builder.define(MODEL, Identifier.withDefaultNamespace("zombie/main"));
+		builder.define(TEXTURE, Identifier.withDefaultNamespace("textures/entity/zombie/zombie.png"));
 	}
 
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
 		super.onSyncedDataUpdated(dataAccessor);
-		if (dataAccessor.equals(STATE_ID)) {
-			this.updateRenderState = true;
-		}
+		if (dataAccessor.equals(MODEL) || dataAccessor.equals(TEXTURE)) this.updateRenderState = true;
 	}
 
 	public final Identifier getModel() {
-		return this.entityData.get(STATE_ID);
+		return this.entityData.get(MODEL);
 	}
 
 	public final void setModel(Identifier model) {
-		this.entityData.set(STATE_ID, model);
+		this.entityData.set(MODEL, model);
+	}
+
+	public final Identifier getTexture() {
+		return this.entityData.get(TEXTURE);
+	}
+
+	public final void setTexture(Identifier texture) {
+		this.entityData.set(TEXTURE, texture);
 	}
 
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
 		this.setModel(input.read("model", Identifier.CODEC).orElse(Identifier.withDefaultNamespace("zombie/main")));
+		this.setTexture(input.read("texture", Identifier.CODEC).orElse(Identifier.withDefaultNamespace("textures/entity/zombie/zombie.png")));
 	}
 
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.store("model", Identifier.CODEC, getModel());
+		output.store("texture", Identifier.CODEC, getTexture());
 	}
 
 	@Nullable
@@ -63,9 +74,9 @@ public class EntityDisplay extends Display {
 
 	@Override
 	protected void updateRenderSubState(boolean interpolate, float partialTick) {
-		this.state = new RenderState(this.getModel());
+		this.state = new RenderState(this.getModel(), this.getTexture());
 	}
 
-	public record RenderState(Identifier model) {
+	public record RenderState(Identifier model, Identifier texture) {
 	}
 }

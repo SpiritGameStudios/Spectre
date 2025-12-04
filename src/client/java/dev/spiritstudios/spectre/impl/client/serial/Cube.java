@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.ExtraCodecs;
-import org.joml.Matrix4f;
+import org.apache.commons.lang3.NotImplementedException;
 import org.joml.Vector2fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -40,15 +40,6 @@ public record Cube(
 		).fieldOf("uv").forGetter(Cube::uv)
 	).apply(instance, Cube::new));
 
-	public static final int[][] INDICES = {
-		new int[] {1, 5, 4, 0},
-		new int[] {2, 6, 7, 3},
-		new int[] {6, 2, 0, 4},
-		new int[] {3, 7, 5, 1},
-		new int[] {2, 3, 1, 0},
-		new int[] {7, 6, 4, 5},
-	};
-
 	public void bake(CubeListBuilder builder, Vector3fc boneOrigin) {
 		var pos = new Vector3f(
 			-(origin.x() + size.x()) - boneOrigin.x(),
@@ -56,11 +47,18 @@ public record Cube(
 			origin.z() - boneOrigin.z()
 		);
 
+		uv
+			.ifLeft(offsets -> builder.texOffs((int) offsets.x(), (int) offsets.y()))
+			.ifRight(faces -> {
+				throw new NotImplementedException();
+			});
+
 		builder.mirror(mirror).addBox(
 			pos.x, pos.y, pos.z,
 			size.x(), size.y(), size.z(),
-			new CubeDeformation(inflate() - 1F)
-		);
+			new CubeDeformation(inflate() - 1F),
+			1.0F, 1.0F
+			);
 	}
 
 //	public SpectreCuboid bake(ModelBone bone, float textureWidth, float textureHeight) {
@@ -175,14 +173,4 @@ public record Cube(
 //			mirror
 //		);
 //	}
-
-	// absolute sorcery written by hama
-	private static Vector3f vertex(int ordinal, Vector3f from, Vector3f to, Matrix4f transform) {
-		return transform.transformPosition(
-			(ordinal & 0b100) == 0 ? from.x : to.x,
-			(ordinal & 0b010) == 0 ? from.y : to.y,
-			(ordinal & 0b001) == 0 ? from.z : to.z,
-			new Vector3f()
-		);
-	}
 }

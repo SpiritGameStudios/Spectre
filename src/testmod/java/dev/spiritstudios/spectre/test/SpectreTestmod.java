@@ -20,7 +20,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.block.Block;
 
 public final class SpectreTestmod implements ModInitializer {
-	public static final EntityDataSerializer<Identifier> ENTITY_MODEL = EntityDataSerializer.forValueType(Identifier.STREAM_CODEC);
+	public static final EntityDataSerializer<Identifier> IDENTIFIER = EntityDataSerializer.forValueType(Identifier.STREAM_CODEC);
 
 	public static final MetatagKey<Block, Integer> TEST_METATAG = new MetatagKey.Builder<>(Registries.BLOCK, Codec.INT)
 		.sync(ByteBufCodecs.INT.cast())
@@ -50,7 +50,7 @@ public final class SpectreTestmod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		FabricTrackedDataRegistry.register(Spectre.id("entity_model"), ENTITY_MODEL);
+		FabricTrackedDataRegistry.register(Spectre.id("identifier"), IDENTIFIER);
 
 		Registry.register(
 			SpectreRegistries.METATAG,
