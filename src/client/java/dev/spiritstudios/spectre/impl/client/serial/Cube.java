@@ -49,12 +49,13 @@ public record Cube(
 		new int[] {7, 6, 4, 5},
 	};
 
-	public void bake(CubeListBuilder builder, Vector3fc pivot) {
+	public void bake(CubeListBuilder builder, Vector3fc boneOrigin) {
 		var pos = new Vector3f(
-			origin.x(),
-			origin.y(),
-			origin.z()
-		).sub(pivot).sub(this.pivot);
+			-(origin.x() + size.x()) - boneOrigin.x(),
+			origin.y() - boneOrigin.y(),
+			origin.z() - boneOrigin.z()
+		);
+
 		builder.mirror(mirror).addBox(
 			pos.x, pos.y, pos.z,
 			size.x(), size.y(), size.z(),

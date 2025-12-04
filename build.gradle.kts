@@ -5,14 +5,18 @@ import kotlin.io.path.writer
 plugins {
 	`java-library`
 	`maven-publish`
+
 	alias(libs.plugins.fabric.loom)
 }
 
-val modId: String by project
-val modVersion: String by project
+val modVersion = "0.0.16"
+val modId = "spectre"
+val modName = "Spectre"
+
+group = "dev.spiritstudios"
+base.archivesName = modId
 
 version = "$modVersion+${libs.versions.minecraft.get()}"
-base.archivesName = modId
 
 loom {
 	splitEnvironmentSourceSets()
@@ -108,15 +112,12 @@ repositories {
 			includeGroupAndSubgroups("org.parchmentmc")
 		}
 	}
-
-//	mavenLocal()
 }
 
 dependencies {
 	minecraft(libs.minecraft)
-
-	@Suppress("UnstableApiUsage")
 	mappings(
+		@Suppress("UnstableApiUsage")
 		loom.layered {
 			officialMojangMappings()
 			parchment(libs.parchment)
@@ -206,7 +207,8 @@ for (sourceSet in arrayOf(sourceSets["main"], sourceSets["client"])) {
 
 tasks.processResources {
 	val map = mapOf(
-		"version" to modVersion
+		"version" to modVersion,
+		"loader_version" to libs.versions.fabric.loader.get()
 	)
 
 	inputs.properties(map)
@@ -227,7 +229,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.jar {
-	from("LICENSE") { rename { "${it}_spectre" } }
+	from("LICENSE") { rename { "${it}_$modId" } }
 }
 
 publishing {

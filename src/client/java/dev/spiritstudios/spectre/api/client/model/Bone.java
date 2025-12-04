@@ -47,7 +47,7 @@ public class Bone {
 			name,
 			cubes,
 			PartPose.offsetAndRotation(
-				pivot.x(), pivot.y(), pivot.z(),
+				origin.x(), origin.y(), origin.z(),
 				rotation.x(), rotation.y(), rotation.z()
 			)
 		);
@@ -55,7 +55,7 @@ public class Bone {
 		for (int i = 0; i < deferred.size(); i++) {
 			Cube cuboid = deferred.get(i);
 			var builder = new CubeListBuilder();
-			cuboid.bake(builder, pivot);
+			cuboid.bake(builder, origin);
 
 			part.addOrReplaceChild(
 				"spectre:" + name + "_r" + i,
