@@ -27,14 +27,14 @@ import java.util.Map;
 
 public class SpectreModelLoader {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static final FileToIdConverter LISTER = new FileToIdConverter("spectre/models", ".geo.json");
+	public static Map<ModelLayerLocation, LayerDefinition> load(ResourceManager manager, String prefix) {
+		var lister = new FileToIdConverter(prefix, ".geo.json");
 
-	public static Map<ModelLayerLocation, LayerDefinition> load(ResourceManager manager) {
-		var resources = LISTER.listMatchingResourceStacks(manager);
+		var resources = lister.listMatchingResourceStacks(manager);
 		Map<ModelLayerLocation, LayerDefinition> results = new HashMap<>();
 
 		for (Map.Entry<Identifier, List<Resource>> entry : resources.entrySet()) {
-			var id = LISTER.fileToId(entry.getKey());
+			var id = lister.fileToId(entry.getKey());
 
 			for (Resource resource : entry.getValue()) {
 				try (Reader reader = resource.openAsReader()) {
@@ -75,7 +75,7 @@ public class SpectreModelLoader {
 
 								results.put(
 									new ModelLayerLocation(
-										LISTER.fileToId(entry.getKey()),
+										lister.fileToId(entry.getKey()),
 										geometry.description().id().replaceFirst("geometry.", "")
 									),
 									LayerDefinition.create(

@@ -30,10 +30,12 @@ public abstract class ModelManagerMixin {
 	) {
 		return original.call(vanilla, executor)
 			.thenApply(previous -> {
-				var data = SpectreModelLoader.load(state.resourceManager());
+				var data = SpectreModelLoader.load(
+					state.resourceManager(),
+					"spectre/models/entity"
+				);
 
 				Map<ModelLayerLocation, LayerDefinition> newRoots = new HashMap<>(((EntityModelSetAccessor) previous).getRoots());
-
 
 				final LayerDefinition TEST_DEF = BloomrayModel.createBodyLayer();
 				// data after so we can theoretically replace vanilla models

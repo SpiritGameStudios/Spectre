@@ -9,7 +9,7 @@
 		"world.entity.ClientLevel$EntityCallbacksMixin",
 		"world.entity.EntityHitboxDebugRendererMixin",
 		"world.entity.EntityModelSetAccessor",
-		"world.entity.LivingEntityRendererMixin",
+		"world.entity.ModelPartMixin",
 		"world.entity.ModelManagerMixin",
 		"debug.ModelPartMixin",
 		"debug.PartDefinitionMixin"

@@ -57,9 +57,34 @@ public class ModelPartDebugRenderer {
 
 		Gizmos.point(centre, color, 5F);
 
-		Gizmos.cuboid(
-			aabb,
-			GizmoStyle.stroke(color)
-		);
+		for (ModelPart.Polygon polygon : cube.polygons) {
+			var vertices = polygon.vertices();
+
+			var v0 = vertices[0];
+			var v1 = vertices[1];
+			var v2 = vertices[2];
+			var v3 = vertices[3];
+
+			var v0Pos = mat.transformPosition(v0.worldX(), v0.worldY(), v0.worldZ(), new Vector3f());
+			var v1Pos = mat.transformPosition(v1.worldX(), v1.worldY(), v1.worldZ(), new Vector3f());
+			var v2Pos = mat.transformPosition(v2.worldX(), v2.worldY(), v2.worldZ(), new Vector3f());
+			var v3Pos = mat.transformPosition(v3.worldX(), v3.worldY(), v3.worldZ(), new Vector3f());
+
+//			var faceCentre = v1Pos.lerp(v3Pos, 0.5F, new Vector3f());
+//			Gizmos.point(new Vec3(faceCentre), color, 7.5F);
+
+			Gizmos.point(new Vec3(v0Pos), color, 7.5F);
+			Gizmos.point(new Vec3(v1Pos), color, 7.5F);
+			Gizmos.point(new Vec3(v2Pos), color, 7.5F);
+			Gizmos.point(new Vec3(v3Pos), color, 7.5F);
+
+			Gizmos.rect(
+				new Vec3(v0Pos),
+				new Vec3(v1Pos),
+				new Vec3(v2Pos),
+				new Vec3(v3Pos),
+				GizmoStyle.stroke(color)
+			);
+		}
 	}
 }
