@@ -33,7 +33,12 @@ public class Bone {
 		List<Cube> deferred = new ArrayList<>();
 
 		Vector3f pivot = new Vector3f(this.pivot);
-		if (parentBone == null) pivot.y += 24;
+
+		boolean hasParent = parentBone != null;
+		if (!hasParent) pivot.y += 24;
+
+		var origin = new Vector3f(pivot);
+		if (hasParent) origin.sub(parentBone.pivot);
 
 		for (Cube cuboid : cuboids) {
 			if ((!cuboid.rotation().equals(0F, 0F, 0F) || !cuboid.pivot().equals(0F, 0F, 0F))) {
@@ -43,8 +48,6 @@ public class Bone {
 			}
 		}
 
-		var origin = new Vector3f(pivot);
-		if (parentBone != null) origin.sub(parentBone.pivot);
 
 		var part = parent.addOrReplaceChild(
 			name,
@@ -58,13 +61,25 @@ public class Bone {
 		for (int i = 0; i < deferred.size(); i++) {
 			Cube cuboid = deferred.get(i);
 			var builder = new CubeListBuilder();
-			cuboid.bake(builder, pivot);
+			cuboid.bake(builder, pivot.sub(
+				0,
+				hasParent? 0 : 24,
+				0,
+				new Vector3f()
+			));
+
+			Vector3f cpivot = new Vector3f(cuboid.pivot());
+
+			if (!hasParent) cpivot.y += 24;
+
+			var corigin = new Vector3f(cpivot);
+			corigin.sub(origin);
 
 			part.addOrReplaceChild(
-				"spectre:" + name + "_r" + i,
+				name + "_r1",
 				builder,
 				PartPose.offsetAndRotation(
-					cuboid.pivot().x() - origin.x, cuboid.pivot().y() - origin.y, cuboid.pivot().z() - origin.z,
+					corigin.x(), corigin.y(), corigin.z(),
 					cuboid.rotation().x(), cuboid.rotation().y(), cuboid.rotation().z()
 				)
 			);

@@ -9,7 +9,7 @@ plugins {
 	alias(libs.plugins.fabric.loom)
 }
 
-val modVersion = "0.0.22"
+val modVersion = "0.0.23"
 val modId = "spectre"
 val modName = "Spectre"
 

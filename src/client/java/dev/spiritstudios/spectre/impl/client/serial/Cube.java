@@ -30,8 +30,8 @@ public record Cube(
 		ExtraCodecs.VECTOR3F.optionalFieldOf("origin", new Vector3f(0F)).forGetter(Cube::origin),
 		ExtraCodecs.VECTOR3F.optionalFieldOf("size", new Vector3f(1F)).forGetter(Cube::size),
 		ModelCodecs.ROTATION_VECTOR.<Vector3fc>xmap(
-			vec -> vec.mul(-1F, -1F, 1F, new Vector3f()),
-			vec -> vec.mul(-1F, -1F, 1F, new Vector3f())
+			vec -> vec.mul(1F, -1F, 1F, new Vector3f()),
+			vec -> vec.mul(1F, -1F, 1F, new Vector3f())
 		).optionalFieldOf("rotation", new Vector3f(0F)).forGetter(Cube::rotation),
 		ExtraCodecs.VECTOR3F.<Vector3fc>xmap(
 			vec -> vec.mul(1F, -1F, 1F, new Vector3f()),
