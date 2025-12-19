@@ -13,7 +13,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class ModelPartDebugRenderer {
-	public static final boolean ENABLED = false;
+	public static final boolean ENABLED = true;
 
 	public static void debugModelPart(ModelPart part, PoseStack.Pose pose) {
 		if (!ENABLED) return;

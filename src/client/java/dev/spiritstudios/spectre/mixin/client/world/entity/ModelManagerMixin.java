@@ -3,6 +3,7 @@ package dev.spiritstudios.spectre.mixin.client.world.entity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.spiritstudios.spectre.impl.client.Flipray;
 import dev.spiritstudios.spectre.impl.client.world.entity.render.SpectreModelLoader;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -38,6 +39,7 @@ public abstract class ModelManagerMixin {
 
 				// data after so we can theoretically replace vanilla models
 				newRoots.putAll(data);
+				newRoots.put(Flipray.LAYER_LOCATION, Flipray.createBodyLayer());
 
 				return new EntityModelSet(newRoots);
 			});

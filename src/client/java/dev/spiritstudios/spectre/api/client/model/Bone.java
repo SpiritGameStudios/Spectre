@@ -44,7 +44,12 @@ public class Bone {
 			if ((!cuboid.rotation().equals(0F, 0F, 0F) || !cuboid.pivot().equals(0F, 0F, 0F))) {
 				deferred.add(cuboid);
 			} else {
-				cuboid.bake(cubes, pivot);
+				cuboid.bake(cubes, pivot.sub(
+					0,
+					hasParent ? 0 : 24,
+					0,
+					new Vector3f()
+				));
 			}
 		}
 
@@ -63,7 +68,7 @@ public class Bone {
 			var builder = new CubeListBuilder();
 			cuboid.bake(builder, pivot.sub(
 				0,
-				hasParent? 0 : 24,
+				hasParent ? 0 : 24,
 				0,
 				new Vector3f()
 			));
@@ -76,7 +81,7 @@ public class Bone {
 			corigin.sub(origin);
 
 			part.addOrReplaceChild(
-				name + "_r1",
+				name + "_r" + (i + 1),
 				builder,
 				PartPose.offsetAndRotation(
 					corigin.x(), corigin.y(), corigin.z(),
