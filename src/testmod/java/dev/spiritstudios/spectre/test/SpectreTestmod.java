@@ -18,6 +18,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 public final class SpectreTestmod implements ModInitializer {
 	public static final EntityDataSerializer<Identifier> IDENTIFIER = EntityDataSerializer.forValueType(Identifier.STREAM_CODEC);
@@ -47,6 +50,17 @@ public final class SpectreTestmod implements ModInitializer {
 		MobCategory.MISC
 	).build(ENTITY_DISPLAY_KEY);
 
+	public static final ResourceKey<Block> BLOBLOCKO_KEY = ResourceKey.create(
+		Registries.BLOCK,
+		Spectre.id("bloblocko")
+	);
+
+	public static final Block BLOBLOCKO = new Block(BlockBehaviour.Properties.of().setId(BLOBLOCKO_KEY)) {
+		@Override
+		protected RenderShape getRenderShape(BlockState state) {
+			return RenderShape.INVISIBLE;
+		}
+	};
 
 	@Override
 	public void onInitialize() {
@@ -68,6 +82,13 @@ public final class SpectreTestmod implements ModInitializer {
 			BuiltInRegistries.ENTITY_TYPE,
 			ENTITY_DISPLAY_KEY,
 			ENTITY_DISPLAY
+		);
+
+
+		Registry.register(
+			BuiltInRegistries.BLOCK,
+			BLOBLOCKO_KEY,
+			BLOBLOCKO
 		);
 
 

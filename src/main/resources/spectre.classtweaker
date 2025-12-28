@@ -1,14 +1,24 @@
 classTweaker v1 named
 
+inject-interface net/minecraft/client/renderer/chunk/SectionCompiler$Results dev/spiritstudios/spectre/impl/client/world/level/render/SpectreSectionCompilerResults
+
+inject-interface net/minecraft/client/renderer/SectionBufferBuilderPack dev/spiritstudios/spectre/impl/client/world/level/render/SpectreSectionBufferBuilderPack
+
+inject-interface net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection dev/spiritstudios/spectre/impl/client/world/level/render/SpectreRenderSection
+
+accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection$RebuildTask
+accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection$ResortTransparencyTask
+accessible field net/minecraft/client/renderer/chunk/SectionRenderDispatcher closed Z
+accessible field net/minecraft/client/renderer/chunk/SectionRenderDispatcher mainThreadUploadExecutor Ljava/util/concurrent/Executor;
+
+# MetatagHolders
 transitive-inject-interface net/minecraft/core/Holder dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<TT;>
 transitive-inject-interface net/minecraft/world/entity/EntityType dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/world/entity/EntityType<*>;>
 transitive-inject-interface net/minecraft/world/level/block/Block dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/world/level/block/Block;>
 transitive-inject-interface net/minecraft/world/item/Item dev/spiritstudios/spectre/api/core/registry/metatag/MetatagHolder<Lnet/minecraft/world/item/Item;>
 
+# Animation baking
 transitive-inject-interface net/minecraft/client/renderer/entity/EntityRendererProvider$Context dev/spiritstudios/spectre/api/client/model/ext/SpectreEntityRendererProviderContext
-
-# Utility method meant for Overworld biomes, used often when creating overworld biomes.
-transitive-accessible method net/minecraft/data/worldgen/biome/OverworldBiomes globalOverworldGeneration (Lnet/minecraft/world/level/biome/BiomeGenerationSettings$Builder;)V
 
 # For adding screenshake to accessibility options
 accessible class net/minecraft/client/Options$FieldAccess

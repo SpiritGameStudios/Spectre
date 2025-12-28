@@ -83,8 +83,8 @@ public class Bone {
 			part.addOrReplaceChild(
 				name + "_r" + (i + 1),
 				builder,
-				PartPose.offsetAndRotation(
-					corigin.x(), corigin.y(), corigin.z(),
+				PartPose.rotation(
+//					corigin.x(), corigin.y(), corigin.z(),
 					cuboid.rotation().x(), cuboid.rotation().y(), cuboid.rotation().z()
 				)
 			);

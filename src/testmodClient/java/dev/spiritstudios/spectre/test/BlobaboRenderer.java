@@ -21,7 +21,7 @@ public class BlobaboRenderer extends LivingEntityRenderer<Blobabo, BlobaboEntity
 			ctx,
 			new Model(
 				ctx,
-				new ModelLayerLocation(Spectre.id("bloomray"), "default"),
+				new ModelLayerLocation(Spectre.id("bloomray"), "main"),
 				Spectre.id("bloomray"),
 				"swim", "idle",
 				"crown_sway", "crown_wiggle"

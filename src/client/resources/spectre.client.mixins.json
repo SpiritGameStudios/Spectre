@@ -2,6 +2,9 @@
 	"required": true,
 	"package": "dev.spiritstudios.spectre.mixin.client",
 	"compatibilityLevel": "JAVA_21",
+	"mixinextras": {
+		"minVersion": "0.5.0"
+	},
 	"client": [
 		"debug.CubeDefinitionMixin",
 		"debug.ModelPartMixin",
@@ -17,7 +20,17 @@
 		"world.entity.EntityRendererProvider$ContextMixin",
 		"world.entity.MinecraftMixin",
 		"world.entity.ModelManagerMixin",
-		"world.entity.ModelPartMixin"
+		"world.entity.ModelPartMixin",
+		"world.level.ChunkSectionsToRenderMixin",
+		"world.level.CompiledSectionMeshMixin",
+		"world.level.LevelRendererMixin",
+		"world.level.SectionBufferBuilderPackMixin",
+		"world.level.SectionCompilerMixin",
+		"world.level.SectionCompilerMixin$ResultsMixin",
+		"world.level.SectionRenderDispatcherMixin",
+		"world.level.SectionRenderDispatcherMixin$RenderSectionMixin",
+		"world.level.SectionRenderDispatcherMixin$RenderSectionMixin$RebuildTaskMixin",
+		"world.level.SectionRenderDispatcherMixin$RenderSectionMixin$ResortTransparencyTaskMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
