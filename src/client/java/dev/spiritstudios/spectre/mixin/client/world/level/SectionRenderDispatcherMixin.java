@@ -3,7 +3,7 @@ package dev.spiritstudios.spectre.mixin.client.world.level;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.MeshData;
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import dev.spiritstudios.spectre.impl.client.world.level.render.SpectreCompiledSectionMesh;
 import dev.spiritstudios.spectre.impl.client.world.level.render.SpectreRenderSection;
 import net.minecraft.client.renderer.chunk.CompiledSectionMesh;

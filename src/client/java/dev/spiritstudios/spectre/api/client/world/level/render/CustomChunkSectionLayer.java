@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.impl.client.world.level.render;
+package dev.spiritstudios.spectre.api.client.world.level.render;
 
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderPipeline;

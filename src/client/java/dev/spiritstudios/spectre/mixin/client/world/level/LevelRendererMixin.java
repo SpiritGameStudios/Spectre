@@ -9,7 +9,7 @@ import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.spiritstudios.spectre.impl.client.SpectreClient;
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import dev.spiritstudios.spectre.impl.client.world.level.render.SpectreCompiledSectionMesh;
 import net.minecraft.client.renderer.DynamicUniforms;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -31,7 +31,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer.CUSTOM_LAYER_DRAWS;
+import static dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer.CUSTOM_LAYER_DRAWS;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {

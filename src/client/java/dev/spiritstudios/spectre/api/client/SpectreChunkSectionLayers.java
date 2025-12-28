@@ -1,6 +1,6 @@
 package dev.spiritstudios.spectre.api.client;
 
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.level.block.state.BlockState;

@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.test;
 
 import dev.spiritstudios.spectre.api.client.SpectreChunkSectionLayers;
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayerGroup;

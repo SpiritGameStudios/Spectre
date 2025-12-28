@@ -3,6 +3,8 @@ package dev.spiritstudios.spectre.impl.client.world.level.render;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
 import net.minecraft.client.renderer.chunk.SectionBuffers;
+
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import org.jspecify.annotations.Nullable;
 
 public interface SpectreCompiledSectionMesh {

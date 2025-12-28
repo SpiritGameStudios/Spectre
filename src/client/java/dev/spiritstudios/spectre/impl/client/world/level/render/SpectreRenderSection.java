@@ -1,6 +1,8 @@
 package dev.spiritstudios.spectre.impl.client.world.level.render;
 
 import com.mojang.blaze3d.vertex.MeshData;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
+
 import net.minecraft.client.renderer.chunk.CompiledSectionMesh;
 
 import java.util.Map;

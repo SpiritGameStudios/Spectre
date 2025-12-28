@@ -8,7 +8,7 @@ import com.mojang.blaze3d.textures.GpuSampler;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.spiritstudios.spectre.impl.client.SpectreClient;
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayerGroup;
 import net.minecraft.client.renderer.chunk.ChunkSectionsToRender;

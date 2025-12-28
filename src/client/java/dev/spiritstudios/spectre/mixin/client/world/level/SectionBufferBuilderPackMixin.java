@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.mixin.client.world.level;
 
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import dev.spiritstudios.spectre.impl.client.SpectreClient;
-import dev.spiritstudios.spectre.impl.client.world.level.render.CustomChunkSectionLayer;
+import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import dev.spiritstudios.spectre.impl.client.world.level.render.SpectreSectionBufferBuilderPack;
 import net.minecraft.client.renderer.SectionBufferBuilderPack;
 import net.minecraft.util.Util;
