@@ -9,5 +9,7 @@ import java.util.Map;
 public interface SpectreCubeDef {
 	ThreadLocal<@Nullable Map<Direction, Face>> FACE_UV = new ThreadLocal<>();
 
-	void spectre$setFaceUv(Map<Direction, Face> faceUV);
+	default void spectre$setFaceUv(Map<Direction, Face> faceUV) {
+		throw new IllegalStateException("Implemented via mixin");
+	}
 }

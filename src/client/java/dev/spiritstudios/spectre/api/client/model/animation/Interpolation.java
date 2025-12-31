@@ -7,7 +7,7 @@ import net.minecraft.util.StringRepresentable;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-public enum LerpMode implements StringRepresentable {
+public enum Interpolation implements StringRepresentable {
 	LINEAR("linear") {
 		@Override
 		public void apply(Query query, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale, Vector3f destination) {
@@ -34,7 +34,7 @@ public enum LerpMode implements StringRepresentable {
 
 	private final String name;
 
-	LerpMode(String name) {
+	Interpolation(String name) {
 		this.name = name;
 	}
 
@@ -45,5 +45,5 @@ public enum LerpMode implements StringRepresentable {
 
 	public abstract void apply(Query query, float delta, SpectreKeyframe[] keyframes, int start, int end, float scale, Vector3f destination);
 
-	public static final Codec<LerpMode> CODEC = StringRepresentable.fromEnum(LerpMode::values);
+	public static final Codec<Interpolation> CODEC = StringRepresentable.fromEnum(Interpolation::values);
 }

@@ -2,10 +2,10 @@ package dev.spiritstudios.spectre.impl.client;
 
 import dev.spiritstudios.spectre.api.client.SpectreScreenshake;
 import dev.spiritstudios.spectre.api.network.ScreenshakeS2CPayload;
-import dev.spiritstudios.spectre.impl.client.world.entity.render.animation.AnimationManager;
+import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationManager;
 import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
-import dev.spiritstudios.spectre.impl.registry.MetatagContents;
-import dev.spiritstudios.spectre.impl.registry.MetatagSyncS2CPayload;
+import dev.spiritstudios.spectre.impl.core.registry.MetatagContents;
+import dev.spiritstudios.spectre.impl.core.registry.MetatagSyncS2CPayload;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabReloader;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabsS2CPayload;
 import net.fabricmc.api.ClientModInitializer;

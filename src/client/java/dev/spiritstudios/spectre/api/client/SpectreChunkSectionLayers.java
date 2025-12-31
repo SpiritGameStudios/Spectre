@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class SpectreChunkSectionLayers {
+public final class SpectreChunkSectionLayers {
 	public static final Event<GetChunkLayerCallback> CHUNK_LAYER_CALLBACK = EventFactory.createArrayBacked(
 		GetChunkLayerCallback.class,
 		callbacks -> state -> {

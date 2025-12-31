@@ -13,7 +13,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class ModelPartDebugRenderer {
-	public static final boolean ENABLED = true;
+	// TODO: Turn into a proper debug renderer
+	// FIXME: Debug cubes/parts are offset from the real model for some reason?
+
+	public static final boolean ENABLED = false;
 
 	public static void debugModelPart(ModelPart part, PoseStack.Pose pose) {
 		if (!ENABLED) return;
@@ -21,7 +24,7 @@ public class ModelPartDebugRenderer {
 		var dir = pose.transformNormal(0, 0, 0, new Vector3f());
 		var partPos = new Vec3(pose.pose().transformPosition(0, 0, 0, new Vector3f()));
 
-		var name = ((SpectreModelPart) (Object) part).spectre$getName();
+		var name = part.spectre$getName();
 		if (name.equals("Unset")) return;
 		int color = ARGB.opaque((name + "meowmeowmeow").hashCode());
 
@@ -46,7 +49,7 @@ public class ModelPartDebugRenderer {
 		var min = new Vector3f(cube.minX, cube.minY, cube.minZ).div(16F);
 		var max = new Vector3f(cube.maxX, cube.maxY, cube.maxZ).div(16F);
 
-		var name = ((SpectreModelPart) (Object) part).spectre$getName();
+		var name = part.spectre$getName();
 		if (name.equals("Unset")) return;
 		int color = ARGB.opaque((name + "meowmeowmeow").hashCode());
 

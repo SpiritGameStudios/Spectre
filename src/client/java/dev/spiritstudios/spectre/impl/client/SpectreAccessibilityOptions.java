@@ -5,6 +5,8 @@ import net.minecraft.client.Options;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+import java.util.Map;
+
 public final class SpectreAccessibilityOptions {
 	public static final OptionInstance<Double> SCREENSHAKE_INTENSITY = new OptionInstance<>(
 		"options.spectre.screenshake_intensity",
@@ -15,6 +17,7 @@ public final class SpectreAccessibilityOptions {
 		value -> {
 		}
 	);
+
 	private static Component getPercentValueText(Component prefix, double value) {
 		return Component.translatable("options.percent_value", prefix, (int) (value * 100.0));
 	}
@@ -23,4 +26,7 @@ public final class SpectreAccessibilityOptions {
 		return value == 0.0 ? Options.genericValueLabel(prefix, CommonComponents.OPTION_OFF) : getPercentValueText(prefix, value);
 	}
 
+	public static final Map<String, OptionInstance<?>> OPTIONS = Map.of(
+		"screenshake_intensity", SCREENSHAKE_INTENSITY
+	);
 }

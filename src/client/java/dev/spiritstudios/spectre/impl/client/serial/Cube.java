@@ -3,7 +3,7 @@ package dev.spiritstudios.spectre.impl.client.serial;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.spiritstudios.spectre.api.client.model.ModelCodecs;
+import dev.spiritstudios.spectre.impl.client.render.model.ModelCodecs;
 import dev.spiritstudios.spectre.impl.client.pond.SpectreCubeDef;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -67,7 +67,7 @@ public record Cube(
 		);
 
 		if (faceUV.get() != null) {
-			((SpectreCubeDef) (Object) builder.getCubes().getLast()).spectre$setFaceUv(faceUV.get());
+			builder.getCubes().getLast().spectre$setFaceUv(faceUV.get());
 		}
 	}
 

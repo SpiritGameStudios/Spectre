@@ -14,7 +14,7 @@ import java.util.Map;
 public class PartDefinitionMixin {
 	@ModifyReturnValue(method = "method_32114", at = @At("RETURN"))
 	private static ModelPart addName(ModelPart original, @Local(argsOnly = true) Map.Entry<String, ModelPart> entry) {
-		((SpectreModelPart) (Object) original).spectre$setName(entry.getKey());
+		original.spectre$setName(entry.getKey());
 		return original;
 	}
 }

@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.api.client.model;
+package dev.spiritstudios.spectre.impl.client.render.model;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.ExtraCodecs;

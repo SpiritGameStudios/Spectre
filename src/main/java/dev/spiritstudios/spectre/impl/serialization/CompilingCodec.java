@@ -24,17 +24,14 @@ public class CompilingCodec<T> implements PrimitiveCodec<T> {
 		}
 
 		return ops.getStringValue(input)
-			.map(string -> {
+			.flatMap(string -> {
 				var expression = Parser.MOLANG.parse(string);
 				try {
 					// Safe, we already checked the type above
 					//noinspection unchecked
-					return (T) compilerOps.compiler.compileAndInitialize(expression, string);
+					return DataResult.success((T) compilerOps.compiler.compileAndInitialize(expression, string));
 				} catch (Throwable e) {
-					Spectre.LOGGER.info(string);
-					Spectre.LOGGER.info(expression.toString());
-
-					throw e;
+					return DataResult.error(() -> "Compilation of molang expression '" + string + "' failed. " + e);
 				}
 			});
 	}

@@ -4,9 +4,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "debug.SharedConstantsMixin",
-    "dfu.DataFixTypesAccessor",
-    "dfu.DataFixTypesMixin",
-    "dfu.NbtUtilsMixin",
     "registry.metatag.BlockMixin",
     "registry.metatag.EntityTypeMixin",
     "registry.metatag.Holder$ReferenceMixin",

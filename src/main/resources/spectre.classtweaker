@@ -6,6 +6,14 @@ inject-interface net/minecraft/client/renderer/SectionBufferBuilderPack dev/spir
 
 inject-interface net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection dev/spiritstudios/spectre/impl/client/world/level/render/SpectreRenderSection
 
+inject-interface net/minecraft/client/renderer/entity/EntityRenderDispatcher dev/spiritstudios/spectre/impl/client/pond/SpectreInternalEntityRenderDispatcher
+
+inject-interface net/minecraft/client/model/geom/ModelPart dev/spiritstudios/spectre/impl/client/pond/SpectreModelPart
+
+inject-interface net/minecraft/client/model/geom/builders/CubeDefinition dev/spiritstudios/spectre/impl/client/pond/SpectreCubeDef
+
+inject-interface net/minecraft/client/renderer/entity/EntityRendererProvider$Context dev/spiritstudios/spectre/impl/client/pond/SpectreInternalEntityRendererProviderContext
+
 accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection$RebuildTask
 accessible class net/minecraft/client/renderer/chunk/SectionRenderDispatcher$RenderSection$ResortTransparencyTask
 accessible field net/minecraft/client/renderer/chunk/SectionRenderDispatcher closed Z

@@ -1,9 +1,8 @@
-package dev.spiritstudios.spectre.impl.client.world.entity.render;
+package dev.spiritstudios.spectre.impl.client.render.model;
 
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
-import dev.spiritstudios.spectre.api.client.model.Bone;
 import dev.spiritstudios.spectre.impl.client.serial.GeoJson;
 import dev.spiritstudios.spectre.impl.client.serial.MinecraftGeometry;
 import dev.spiritstudios.spectre.impl.client.serial.SerialBone;

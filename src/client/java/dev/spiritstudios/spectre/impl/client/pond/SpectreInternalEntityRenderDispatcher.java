@@ -5,5 +5,7 @@ import dev.spiritstudios.spectre.api.client.model.animation.EntityAnimationSet;
 import java.util.function.Supplier;
 
 public interface SpectreInternalEntityRenderDispatcher {
-	void spectre$setEntityAnimations(Supplier<EntityAnimationSet> entityAnimations);
+	default void spectre$setEntityAnimations(Supplier<EntityAnimationSet> entityAnimations) {
+		throw new IllegalStateException("Implemented via mixin");
+	}
 }

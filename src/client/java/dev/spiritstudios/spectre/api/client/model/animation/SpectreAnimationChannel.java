@@ -46,7 +46,7 @@ public record SpectreAnimationChannel(AnimationChannel.Target target, SpectreKey
 					new SpectreKeyframe(
 						0F,
 						exp, exp,
-						LerpMode.LINEAR
+						Interpolation.LINEAR
 					)
 				),
 				channel -> {

@@ -10,14 +10,14 @@ public record SpectreKeyframe(
 	float timestamp,
 	Vector3fExpression preTarget,
 	Vector3fExpression postTarget,
-	LerpMode interpolation
+	Interpolation interpolation
 ) {
 	public static Codec<SpectreKeyframe> codec(float timestamp) {
 		return Codec.withAlternative(
 			RecordCodecBuilder.create(instance -> instance.group(
 				Vector3fExpression.CODEC.optionalFieldOf("pre").forGetter(k -> Optional.of(k.preTarget)),
 				Vector3fExpression.CODEC.fieldOf("post").forGetter(SpectreKeyframe::postTarget),
-				LerpMode.CODEC.optionalFieldOf("lerp_mode", LerpMode.LINEAR).forGetter(SpectreKeyframe::interpolation)
+				Interpolation.CODEC.optionalFieldOf("lerp_mode", Interpolation.LINEAR).forGetter(SpectreKeyframe::interpolation)
 			).apply(instance, (from, to, lerp) -> new SpectreKeyframe(
 				timestamp,
 				from.orElse(to),
@@ -29,7 +29,7 @@ public record SpectreKeyframe(
 					timestamp,
 					Vector3fExpression.of(list),
 					Vector3fExpression.of(list),
-					LerpMode.LINEAR
+					Interpolation.LINEAR
 				),
 				keyframe -> {
 					throw new UnsupportedOperationException("Cannot encode SpectreKeyframe.");

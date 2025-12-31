@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.impl.registry;
+package dev.spiritstudios.spectre.impl.core.registry;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;

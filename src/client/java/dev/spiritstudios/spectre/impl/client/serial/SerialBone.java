@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.impl.client.serial;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.spiritstudios.spectre.api.client.model.ModelCodecs;
+import dev.spiritstudios.spectre.impl.client.render.model.ModelCodecs;
 import net.minecraft.util.ExtraCodecs;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;

@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class AccessibilityOptionsScreenMixin {
 	@ModifyReturnValue(method = "options", at = @At("RETURN"))
 	private static OptionInstance<?>[] addOptions(OptionInstance<?>[] original) {
-		return ArrayUtils.add(original, SpectreAccessibilityOptions.SCREENSHAKE_INTENSITY);
+		return ArrayUtils.addAll(original, SpectreAccessibilityOptions.OPTIONS.values().toArray(OptionInstance[]::new));
 	}
 }

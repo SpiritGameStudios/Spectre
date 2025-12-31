@@ -1,6 +1,6 @@
 package dev.spiritstudios.spectre.api.client.model.animation;
 
-import dev.spiritstudios.spectre.impl.client.world.entity.render.animation.AnimationManager;
+import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationManager;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.server.packs.resources.ResourceManager;
 

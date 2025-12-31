@@ -1,7 +1,7 @@
 package dev.spiritstudios.spectre.mixin.registry.unfreeze;
 
 
-import dev.spiritstudios.spectre.impl.registry.UnfrozenRegistry;
+import dev.spiritstudios.spectre.impl.core.registry.UnfrozenRegistry;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.minecraft.core.Holder;

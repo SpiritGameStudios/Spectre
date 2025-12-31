@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.impl.client.world.entity.render.animation;
+package dev.spiritstudios.spectre.impl.client.render.model.animation;
 
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;

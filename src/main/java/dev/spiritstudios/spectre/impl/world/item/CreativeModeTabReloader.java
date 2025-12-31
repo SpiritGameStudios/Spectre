@@ -6,19 +6,15 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import dev.spiritstudios.spectre.api.world.item.CreativeModeTabFile;
 import dev.spiritstudios.spectre.impl.Spectre;
-import dev.spiritstudios.spectre.impl.registry.UnfrozenRegistry;
+import dev.spiritstudios.spectre.impl.core.registry.UnfrozenRegistry;
 import dev.spiritstudios.spectre.mixin.world.item.CreativeModeTabAccessor;
 import dev.spiritstudios.spectre.mixin.registry.unfreeze.MappedRegistryAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.fabricmc.fabric.api.resource.v1.reloader.ResourceReloaderKeys;
 import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
-import net.fabricmc.fabric.impl.tag.TagAliasLoader;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -27,8 +23,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.StrictJsonParser;
@@ -112,10 +106,7 @@ public final class CreativeModeTabReloader extends SimpleResourceReloader<Map<Id
 
 		tabs.forEach((id, value) -> {
 			ResourceKey<CreativeModeTab> key = ResourceKey.create(Registries.CREATIVE_MODE_TAB, id);
-			var builder = CreativeModeTab.builder(
-				null,
-				-1
-			);
+			var builder = FabricItemGroup.builder();
 
 			value.title().ifPresentOrElse(
 				builder::title,

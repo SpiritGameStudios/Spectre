@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.api.client.model;
+package dev.spiritstudios.spectre.impl.client.render.model;
 
 import dev.spiritstudios.spectre.impl.client.serial.Cube;
 import net.minecraft.client.model.geom.PartPose;

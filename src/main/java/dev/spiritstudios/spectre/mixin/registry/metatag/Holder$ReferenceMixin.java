@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.mixin.registry.metatag;
 
 import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
 import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagHolder;
-import dev.spiritstudios.spectre.impl.registry.MutableMetatagHolder;
+import dev.spiritstudios.spectre.impl.core.registry.MutableMetatagHolder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;

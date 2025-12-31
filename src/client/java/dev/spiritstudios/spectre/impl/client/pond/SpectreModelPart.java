@@ -1,6 +1,11 @@
 package dev.spiritstudios.spectre.impl.client.pond;
 
 public interface SpectreModelPart {
-	String spectre$getName();
-	void spectre$setName(String name);
+	default String spectre$getName() {
+		throw new IllegalStateException("Implemented via mixin");
+	}
+
+	default void spectre$setName(String name) {
+		throw new IllegalStateException("Implemented via mixin");
+	}
 }

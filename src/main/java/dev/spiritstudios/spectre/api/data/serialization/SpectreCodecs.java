@@ -67,9 +67,9 @@ public final class SpectreCodecs {
 
 	public static final Codec<MolangExpression> MOLANG = Codec.withAlternative(
 		new CompilingCodec<>(MolangExpression.class),
-		Codec.FLOAT.flatComapMap(
+		Codec.FLOAT.xmap(
 			v -> (query, variables) -> v,
-			function -> DataResult.error(() -> "Cannot encode molang expression.")
+			function -> function.evaluate(null, null)
 		)
 	);
 

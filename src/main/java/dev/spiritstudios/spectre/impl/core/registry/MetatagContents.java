@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.impl.registry;
+package dev.spiritstudios.spectre.impl.core.registry;
 
 import dev.spiritstudios.spectre.api.core.exception.ImpossibleStateException;
 import dev.spiritstudios.spectre.api.core.registry.metatag.MetatagKey;
