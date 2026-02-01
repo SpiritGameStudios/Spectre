@@ -6,6 +6,8 @@ import dev.spiritstudios.spectre.impl.Spectre;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -24,7 +26,7 @@ public record MetatagSyncS2CPayload(List<MetatagContents<?, ?>> contents) implem
 		return ByteBufCodecs.<RegistryFriendlyByteBuf, Holder<K>, V, Map<Holder<K>, V>>map(
 			Object2ObjectLinkedOpenHashMap::new,
 			ByteBufCodecs.holderRegistry(metatag.registry()),
-			metatag.packetCodec()
+			Objects.requireNonNull(metatag.packetCodec())
 		).map(
 			map -> new MetatagContents<>(metatag, map),
 			MetatagContents::entries

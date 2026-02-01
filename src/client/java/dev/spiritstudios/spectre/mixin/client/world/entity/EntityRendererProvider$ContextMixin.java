@@ -18,6 +18,7 @@ public class EntityRendererProvider$ContextMixin implements SpectreEntityRendere
 		this.animationSet = animationSet;
 	}
 
+	@SuppressWarnings("AddedMixinMembersNamePattern")
 	@Override
 	public EntityAnimationSet getAnimationSet() {
 		return animationSet;

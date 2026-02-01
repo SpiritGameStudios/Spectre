@@ -4,7 +4,7 @@ import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.api.world.entity.EntityPart;
 import dev.spiritstudios.spectre.api.world.entity.PartHolder;
 import dev.spiritstudios.spectre.api.world.entity.animation.AnimationController;
-import dev.spiritstudios.spectre.impl.Spectre;
+import net.minecraft.SharedConstants;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -22,27 +22,54 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 		new Vec3(0, 1, 0)
 	));
 
+	private float wiggleCooldown = 20 * SharedConstants.TICKS_PER_SECOND;
+
 	private boolean swimming;
 
 	public final AnimationController movement;
 	public final AnimationController antenna;
 
-	private final Query query = new Query();
-
 	public Blobabo(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 
-		movement = AnimationController.create(
-			Spectre.id("bloomray"),
-			"controller.animation.bloomray.movement",
-			this
+		var builder = new AnimationController.Builder();
+
+		var idle = builder
+			.createState("idle")
+			.animation("idle");
+
+		var swim = builder
+			.createState("swim")
+			.animation("swim");
+
+		idle.transition(() -> this.getDeltaMovement().lengthSqr() > (0.25 * 0.25) ?
+			new AnimationController.Transition(swim.state) :
+			null
 		);
 
-		antenna = AnimationController.create(
-			Spectre.id("bloomray"),
-			"controller.animation.bloomray.antenna",
-			this
+		swim.transition(() -> this.getDeltaMovement().lengthSqr() < (0.25 * 0.25) ?
+			new AnimationController.Transition(idle.state) :
+			null
 		);
+
+		movement = builder.build(idle);
+
+		builder = new AnimationController.Builder();
+
+		var sway = builder
+			.createState("sway")
+			.animation("sway");
+
+		var wiggle = builder
+			.createState("wiggle")
+			.animation("wiggle");
+
+		sway.transition(() -> this.getDeltaMovement().lengthSqr() > (0.25 * 0.25) ?
+			new AnimationController.Transition(swim.state) :
+			null
+		);
+
+		antenna = builder.build(idle);
 	}
 
 	@Override
@@ -75,9 +102,7 @@ public class Blobabo extends PathfinderMob implements PartHolder<Blobabo> {
 	public void tick() {
 		super.tick();
 
-		query.set(this, 0F);
-
-		movement.tick(query);
-		antenna.tick(query);
+		movement.tick(tickCount);
+		antenna.tick(tickCount);
 	}
 }

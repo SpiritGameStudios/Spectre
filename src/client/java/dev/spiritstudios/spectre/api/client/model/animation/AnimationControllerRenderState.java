@@ -1,30 +1,41 @@
 package dev.spiritstudios.spectre.api.client.model.animation;
 
+import dev.spiritstudios.spectre.api.core.math.Easing;
 import dev.spiritstudios.spectre.api.core.math.Query;
 import dev.spiritstudios.spectre.api.world.entity.animation.AnimationController;
 import dev.spiritstudios.spectre.api.world.entity.animation.AnimationControllerState;
 import net.minecraft.SharedConstants;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
 public class AnimationControllerRenderState {
-	public long prevStartTick;
-	public @Nullable AnimationControllerState previousState;
-	public AnimationControllerState state;
-	public long transitionStartTick;
+	private float previousStateBeginTime = -1;
+	private AnimationController.State previousState = null;
+
+	private float blendTime = 0;
+	private Easing blendFunction = Easing.LINEAR;
+
+	private float currentStateBeginTime = 0;
+	private AnimationController.State currentState;
 
 	public void copyFrom(AnimationController controller) {
+		this.previousStateBeginTime = controller.getPreviousStateBeginTime();
 		this.previousState = controller.getPreviousState();
-		this.state = controller.getState();
-		this.transitionStartTick = controller.getAnimStartTick();
-		this.prevStartTick = controller.getPrevStartTick();
+
+		this.blendTime = controller.getBlendTime();
+		this.blendFunction = controller.getBlendFunction();
+
+		this.currentStateBeginTime = controller.getCurrentStateBeginTime();
+		this.currentState = controller.getCurrentState();
 	}
 
 	public void apply(Map<String, SpectreKeyframeAnimation> animations, Query query, float time) {
-		float stateTime = (time - transitionStartTick);
+		float stateTime = (time - currentStateBeginTime);
 		float transitionProgress = previousState == null ? 1F :
-			Math.min(stateTime / (previousState.transitionLength() * SharedConstants.TICKS_PER_SECOND), 1F);
+			Math.min(stateTime / (blendTime * SharedConstants.TICKS_PER_SECOND), 1F);
+
+		transitionProgress = (float) blendFunction.in(transitionProgress);
 
 		if (transitionProgress != 1f) {
 			for (String animationName : previousState.animations()) {
@@ -34,20 +45,20 @@ public class AnimationControllerRenderState {
 
 				animation.apply(
 					query,
-					time - prevStartTick,
+					time - previousStateBeginTime,
 					1F - transitionProgress
 				);
 			}
 		}
 
-		for (String animationName : state.animations()) {
+		for (String animationName : currentState.animations()) {
 			var animation = animations.get(animationName);
 
 			if (animation == null) return;
 
 			animation.apply(
 				query,
-				time - transitionStartTick,
+				time - currentStateBeginTime,
 				transitionProgress
 			);
 		}

@@ -37,7 +37,7 @@ public class EntityDisplay extends Display {
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
 		super.onSyncedDataUpdated(dataAccessor);
-		if (dataAccessor.equals(MODEL) || dataAccessor.equals(TEXTURE)) this.updateRenderState = true;
+		if (dataAccessor.equals(MODEL) || dataAccessor.equals(TEXTURE) || dataAccessor.equals(ANIM)) this.updateRenderState = true;
 	}
 
 	public final Identifier getModel() {

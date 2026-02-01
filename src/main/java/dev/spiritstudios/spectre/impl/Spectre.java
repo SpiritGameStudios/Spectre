@@ -6,7 +6,6 @@ import dev.spiritstudios.spectre.api.core.registry.SpectreRegistries;
 import dev.spiritstudios.spectre.impl.command.ComponentsCommand;
 import dev.spiritstudios.spectre.impl.command.MetatagCommand;
 import dev.spiritstudios.spectre.impl.command.ScreenshakeCommand;
-import dev.spiritstudios.spectre.impl.world.entity.animation.AnimationControllerManager;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabReloader;
 import dev.spiritstudios.spectre.impl.world.item.CreativeModeTabsS2CPayload;
 import dev.spiritstudios.spectre.impl.core.registry.MetatagReloader;
@@ -39,11 +38,6 @@ public final class Spectre implements ModInitializer {
 
 		MetatagReloader.register();
 		CreativeModeTabReloader.register();
-
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
-			Spectre.id("animation_controllers"),
-			AnimationControllerManager.INSTANCE
-		);
 
 		PayloadTypeRegistry.playS2C().register(
 			ScreenshakeS2CPayload.TYPE,

@@ -2,7 +2,7 @@ package dev.spiritstudios.spectre.impl.client;
 
 import dev.spiritstudios.spectre.api.client.SpectreScreenshake;
 import dev.spiritstudios.spectre.api.network.ScreenshakeS2CPayload;
-import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationManager;
+import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationLoader;
 import dev.spiritstudios.spectre.api.client.world.level.render.CustomChunkSectionLayer;
 import dev.spiritstudios.spectre.impl.core.registry.MetatagContents;
 import dev.spiritstudios.spectre.impl.core.registry.MetatagSyncS2CPayload;
@@ -20,18 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class SpectreClient implements ClientModInitializer {
-	public static final AnimationManager ANIMATION_MANAGER = new AnimationManager();
-
 	public static final List<CustomChunkSectionLayer> CUSTOM_LAYERS = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(AnimationManager.ID, ANIMATION_MANAGER);
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).addReloaderOrdering(
-			AnimationManager.ID,
-			ResourceReloaderKeys.Client.MODELS
-		);
-
 		ClientPlayNetworking.registerGlobalReceiver(
 			ScreenshakeS2CPayload.TYPE,
 			(payload, context) -> {

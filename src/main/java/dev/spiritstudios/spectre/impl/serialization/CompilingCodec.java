@@ -4,7 +4,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import dev.spiritstudios.mojank.meow.Parser;
-import dev.spiritstudios.spectre.impl.Spectre;
 
 public class CompilingCodec<T> implements PrimitiveCodec<T> {
 	private final Class<T> type;

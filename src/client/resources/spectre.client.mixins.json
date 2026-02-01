@@ -6,21 +6,21 @@
 		"minVersion": "0.5.0"
 	},
 	"client": [
-		"debug.CubeDefinitionMixin",
-		"debug.ModelPartMixin",
-		"debug.ModelPartMixin$CubeMixin",
-		"debug.PartDefinitionMixin",
 		"screenshake.AccessibilityOptionsScreenMixin",
 		"screenshake.GameRendererMixin",
 		"screenshake.OptionsMixin",
 		"world.entity.ClientLevel$EntityCallbacksMixin",
-		"world.entity.EntityHitboxDebugRendererMixin",
+		"world.entity.CubeDefinitionMixin",
 		"world.entity.EntityModelSetAccessor",
 		"world.entity.EntityRenderDispatcherMixin",
 		"world.entity.EntityRendererProvider$ContextMixin",
 		"world.entity.MinecraftMixin",
 		"world.entity.ModelManagerMixin",
 		"world.entity.ModelPartMixin",
+		"world.entity.ModelPartMixin$CubeMixin",
+		"world.entity.debug.EntityHitboxDebugRendererMixin",
+		"world.entity.debug.ModelPartMixin",
+		"world.entity.debug.PartDefinitionMixin",
 		"world.level.ChunkSectionsToRenderMixin",
 		"world.level.CompiledSectionMeshMixin",
 		"world.level.LevelRendererMixin",
@@ -39,7 +39,6 @@
 		"requireAnnotations": true
 	},
 	"mixins": [
-		"NarratorMixin",
-		"animation.AnimationStateAccessor"
+		"NarratorMixin"
 	]
 }

@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.mixin.client.world.entity;
+package dev.spiritstudios.spectre.mixin.client.world.entity.debug;
 
 import dev.spiritstudios.spectre.api.world.entity.EntityPart;
 import dev.spiritstudios.spectre.api.world.entity.PartHolder;

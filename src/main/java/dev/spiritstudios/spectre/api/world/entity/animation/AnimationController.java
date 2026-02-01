@@ -1,79 +1,118 @@
 package dev.spiritstudios.spectre.api.world.entity.animation;
 
-import dev.spiritstudios.spectre.api.core.math.Query;
-import dev.spiritstudios.spectre.impl.world.entity.animation.AnimationControllerManager;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import dev.spiritstudios.spectre.api.core.math.Easing;
+import org.jspecify.annotations.Nullable;
+
+import java.util.*;
 
 public class AnimationController {
+	private final List<State> states;
 
-	public static AnimationController create(Identifier id, String name, Entity entity) {
-		var controllers = AnimationControllerManager.INSTANCE.controllers.get(id);
-		var desc = controllers.get(name);
+	private float previousStateBeginTime = -1;
+	private @Nullable State previousState = null;
 
-		AnimationController controller = new AnimationController(
-			id,
-			name,
-			desc.bake(),
-			entity
-		);
+	private float blendTime = 0;
+	private Easing blendFunction = Easing.LINEAR;
 
-		AnimationControllerManager.CONTROLLERS.add(controller);
+	private float currentStateBeginTime = 0;
+	private State currentState;
 
-		return controller;
+	private AnimationController(List<State> states, State initialState) {
+		this.states = states;
+		this.currentState = initialState;
 	}
 
-	public final Identifier location;
-	public final String name;
+	public void tick(float time) {
+		for (TransitionSupplier supplier : currentState.transitions) {
+			Transition transition = supplier.pickTransition();
 
-	public final Entity entity;
+			if (transition != null) {
+				this.previousStateBeginTime = currentStateBeginTime;
+				this.previousState = this.currentState;
 
-	private @Nullable AnimationControllerState previousState = null;
-	private AnimationControllerState state;
+				this.blendTime = transition.blendTime;
+				this.blendFunction = transition.blendFunction;
 
-	private long prevStartTick;
-	private long animStartTick;
-
-
-	public AnimationController(Identifier location, String name, AnimationControllerState initialState, Entity entity) {
-		this.location = location;
-		this.name = name;
-		this.entity = entity;
-
-		this.state = initialState;
-		this.animStartTick = entity.tickCount;
-	}
-
-	public void tick(Query query) {
-		for (AnimationControllerState.Transition transition : state.transitions()) {
-			if (transition.condition().evaluate(query, null)) {
-				transition(transition.state());
-				break;
+				this.currentStateBeginTime = time;
+				this.currentState = transition.newState;
 			}
 		}
 	}
 
-	public void transition(AnimationControllerState newState) {
-		prevStartTick = animStartTick;
-		animStartTick = entity.tickCount;
-		previousState = state;
-		state = newState;
+	public float getPreviousStateBeginTime() {
+		return previousStateBeginTime;
 	}
 
-	public AnimationControllerState getState() {
-		return state;
-	}
-
-	public @Nullable AnimationControllerState getPreviousState() {
+	public @Nullable State getPreviousState() {
 		return previousState;
 	}
 
-	public long getAnimStartTick() {
-		return animStartTick;
+	public float getCurrentStateBeginTime() {
+		return currentStateBeginTime;
 	}
 
-	public long getPrevStartTick() {
-		return prevStartTick;
+	public @Nullable State getCurrentState() {
+		return currentState;
+	}
+
+	public float getBlendTime() {
+		return blendTime;
+	}
+
+	public Easing getBlendFunction() {
+		return blendFunction;
+	}
+
+	public record Transition(State newState, float blendTime, Easing blendFunction) {
+		public Transition(State newState) {
+			this(newState, 0, Easing.LINEAR);
+		}
+
+		public Transition(State newState, float blendTime) {
+			this(newState, blendTime, Easing.LINEAR);
+		}
+	}
+
+	public interface TransitionSupplier {
+		@Nullable Transition pickTransition();
+	}
+
+	public record State(String name, List<TransitionSupplier> transitions, List<String> animations) {
+
+	}
+
+	public static class Builder {
+		private final List<State> states = new ArrayList<>();
+
+		public StateBuilder createState(String name) {
+			State state = new State(name, new ArrayList<>(1), new ArrayList<>());
+			states.add(state);
+
+			return new StateBuilder(state);
+		}
+
+		public AnimationController build(StateBuilder initialState) {
+			return new AnimationController(states, initialState.state);
+		}
+
+		public static class StateBuilder {
+			public final State state;
+
+			private StateBuilder(State state) {
+				this.state = state;
+			}
+
+			public StateBuilder transition(TransitionSupplier supplier) {
+				state.transitions.add(supplier);
+				return this;
+			}
+
+			public StateBuilder animation(String name) {
+				state.animations.add(name);
+				return this;
+
+			}
+
+		}
 	}
 }

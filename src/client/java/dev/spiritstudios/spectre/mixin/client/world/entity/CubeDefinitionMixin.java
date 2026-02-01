@@ -1,4 +1,4 @@
-package dev.spiritstudios.spectre.mixin.client.debug;
+package dev.spiritstudios.spectre.mixin.client.world.entity;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

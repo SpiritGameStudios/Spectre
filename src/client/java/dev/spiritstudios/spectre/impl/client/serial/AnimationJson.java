@@ -14,5 +14,4 @@ public record AnimationJson(
 		Codec.STRING.fieldOf("format_version").forGetter(AnimationJson::formatVersion),
 		Codec.unboundedMap(Codec.STRING, SpectreAnimationDefinition.CODEC).fieldOf("animations").forGetter(AnimationJson::animations)
 	).apply(instance, AnimationJson::new));
-
 }

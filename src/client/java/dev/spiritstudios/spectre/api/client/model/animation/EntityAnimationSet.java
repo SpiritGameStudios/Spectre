@@ -1,13 +1,14 @@
 package dev.spiritstudios.spectre.api.client.model.animation;
 
-import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationManager;
+import dev.spiritstudios.spectre.impl.client.render.model.animation.AnimationLoader;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.util.Map;
 
-public class EntityAnimationSet {
+public final class EntityAnimationSet {
 	public static final EntityAnimationSet EMPTY = new EntityAnimationSet(Map.of());
+
 	private final Map<AnimationLocation, SpectreAnimationDefinition> definitions;
 
 	public SpectreKeyframeAnimation bake(AnimationLocation location, ModelPart part) {
@@ -24,6 +25,6 @@ public class EntityAnimationSet {
 	}
 
 	public static EntityAnimationSet load(ResourceManager manager) {
-		return new EntityAnimationSet(AnimationManager.load(manager));
+		return new EntityAnimationSet(AnimationLoader.load(manager));
 	}
 }

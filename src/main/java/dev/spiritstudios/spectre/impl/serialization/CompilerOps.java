@@ -2,9 +2,7 @@ package dev.spiritstudios.spectre.impl.serialization;
 
 import com.mojang.serialization.DynamicOps;
 import dev.spiritstudios.mojank.meow.compile.Compiler;
-import dev.spiritstudios.spectre.api.core.math.MolangExpression;
 import net.minecraft.resources.DelegatingOps;
-import org.jetbrains.annotations.Nullable;
 
 public class CompilerOps<T, C> extends DelegatingOps<T> {
 	public Compiler<C> compiler;

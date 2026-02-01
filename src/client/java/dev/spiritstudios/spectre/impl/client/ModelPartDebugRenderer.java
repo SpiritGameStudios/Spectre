@@ -1,7 +1,6 @@
 package dev.spiritstudios.spectre.impl.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.spiritstudios.spectre.impl.client.pond.SpectreModelPart;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;

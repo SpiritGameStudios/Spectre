@@ -18,8 +18,11 @@ import dev.spiritstudios.spectre.impl.client.serial.AnimationJson;
 import dev.spiritstudios.spectre.impl.serialization.CompilerOps;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.ResourceReloaderKeys;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -43,7 +46,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-public class AnimationManager implements PreparableReloadListener {
+public class AnimationLoader implements PreparableReloadListener {
 	public static final Identifier ID = Spectre.id("animations");
 
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -66,6 +69,14 @@ public class AnimationManager implements PreparableReloadListener {
 	);
 
 	public static final FileToIdConverter LISTER = new FileToIdConverter("spectre/animations/entity", ".animation.json");
+
+	public AnimationLoader() {
+		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(AnimationLoader.ID, this);
+		ResourceLoader.get(PackType.CLIENT_RESOURCES).addReloaderOrdering(
+			AnimationLoader.ID,
+			ResourceReloaderKeys.Client.MODELS
+		);
+	}
 
 	public static Map<AnimationLocation, SpectreAnimationDefinition> load(ResourceManager manager) {
 		var resources = LISTER.listMatchingResourceStacks(manager);

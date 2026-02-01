@@ -17,19 +17,19 @@ public record SpectreKeyframe(
 			RecordCodecBuilder.create(instance -> instance.group(
 				Vector3fExpression.CODEC.optionalFieldOf("pre").forGetter(k -> Optional.of(k.preTarget)),
 				Vector3fExpression.CODEC.fieldOf("post").forGetter(SpectreKeyframe::postTarget),
-				Interpolation.CODEC.optionalFieldOf("lerp_mode", Interpolation.LINEAR).forGetter(SpectreKeyframe::interpolation)
-			).apply(instance, (from, to, lerp) -> new SpectreKeyframe(
+				Interpolation.CODEC.optionalFieldOf("lerp_mode", Interpolations.LINEAR).forGetter(SpectreKeyframe::interpolation)
+			).apply(instance, (from, to, interpolation) -> new SpectreKeyframe(
 				timestamp,
 				from.orElse(to),
 				to,
-				lerp
+				interpolation
 			))),
 			SpectreCodecs.MOLANG.listOf(3, 3).xmap(
 				list -> new SpectreKeyframe(
 					timestamp,
 					Vector3fExpression.of(list),
 					Vector3fExpression.of(list),
-					Interpolation.LINEAR
+					Interpolations.LINEAR
 				),
 				keyframe -> {
 					throw new UnsupportedOperationException("Cannot encode SpectreKeyframe.");
