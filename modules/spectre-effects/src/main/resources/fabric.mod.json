@@ -1,0 +1,43 @@
+{
+	"schemaVersion": 1,
+	"id": "spectre-effects",
+	"version": "${version}",
+	"name": "Spectre Effects",
+	"description": "",
+	"authors": [],
+	"contact": {
+		"repo": "https://github.com/SpiritGameStudios/Spectre",
+		"issues": "https://github.com/SpiritGameStudios/Spectre/issues"
+	},
+	"license": "MPL-2.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["dev.spiritstudios.spectre.impl.effects.SpectreEffectsInitializer"],
+		"client": ["dev.spiritstudios.spectre.impl.effects.client.SpectreEffectsClientInitializer"]
+
+	},
+	"mixins": [
+		"spectre-effects.mixins.json",
+		{
+			"config": "spectre-effects.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"accessWidener": "spectre-effects.classtweaker",
+	"depends": {
+		"minecraft": "*",
+		"fabric-api": "*",
+		"java": ">=25"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/TTmx7d2axf",
+				"modmenu.github_releases": "https://github.com/SpiritGameStudios/Spectre/releases"
+			},
+			"badges": [
+				"library"
+			]
+		}
+	}
+}

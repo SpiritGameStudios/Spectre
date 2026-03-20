@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"package": "dev.spiritstudios.spectre.mixin.effects.client",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	},
+	"mixins": [
+		"AccessibilityOptionsScreenMixin",
+		"GameRendererMixin",
+		"OptionsMixin"
+	]
+}

@@ -1,0 +1,17 @@
+{
+	"schemaVersion": 1,
+	"id": "spectre-models-testmod",
+	"version": "${version}",
+	"name": "Spectre Models Testmod",
+	"description": "",
+	"authors": [],
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "dev.spiritstudios.spectre.test.models.SpectreModelsTestmodInitializer"
+		],
+		"client": [
+			"dev.spiritstudios.spectre.test.models.client.SpectreModelsTestmodClientInitializer"
+		]
+	}
+}

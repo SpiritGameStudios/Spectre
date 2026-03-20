@@ -1,259 +1,38 @@
-import kotlin.io.path.createDirectories
-import kotlin.io.path.notExists
-import kotlin.io.path.writer
-
 plugins {
-	`java-library`
-	`maven-publish`
-
-	alias(libs.plugins.fabric.loom)
+	id("spectre.common-conventions")
 }
 
-val modVersion = "0.0.25"
-val modId = "spectre"
-val modName = "Spectre"
+version = "0.1.0"
 
-group = "dev.spiritstudios"
-base.archivesName = modId
+dependencies {
+	for (subproject in subprojects) {
+		api(subproject)
 
-version = "$modVersion+${libs.versions.minecraft.get()}"
+		subproject.afterEvaluate {
+			val subproj = project.project("${subproject.path}:")
 
-loom {
-	splitEnvironmentSourceSets()
-	accessWidenerPath = file("src/main/resources/spectre.classtweaker")
+			clientImplementation(subproj.sourceSets.client.get().output)
+
+			testmodImplementation(subproj.sourceSets.testmod.get().output)
+			testmodClientImplementation(subproj.sourceSets.testmodClient.get().output)
+		}
+	}
 }
 
 sourceSets {
-	val main by getting
-	val client by getting
-
-	val testmod by creating {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
+	get("testmod").apply {
+		compileClasspath += sourceSets["main"].compileClasspath
+		runtimeClasspath += sourceSets["main"].runtimeClasspath
 	}
 
-	create("testmodClient") {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
+	get("testmodClient").apply {
+		compileClasspath += sourceSets["main"].compileClasspath
+		runtimeClasspath += sourceSets["main"].runtimeClasspath
 
-		compileClasspath += testmod.compileClasspath
-		runtimeClasspath += testmod.runtimeClasspath
+		compileClasspath += sourceSets["client"].compileClasspath
+		runtimeClasspath += sourceSets["client"].runtimeClasspath
 
-		compileClasspath += client.compileClasspath
-		runtimeClasspath += client.runtimeClasspath
-	}
-}
-
-loom {
-	mods {
-		register("spectre") {
-			sourceSet("main")
-			sourceSet("client")
-		}
-
-		register("testmod") {
-			sourceSet("testmod")
-			sourceSet("testmodClient")
-		}
-	}
-
-	runs {
-		create("gametest") {
-			server()
-			name = "Game Test"
-
-			vmArg("-Dfabric-api.gametest")
-			vmArg("-Dfabric-api.gametest.report-file=${project.layout.buildDirectory.get()}/junit.xml")
-			runDir = "build/gametest"
-
-			source(sourceSets["testmod"])
-		}
-
-		create("testmodClient") {
-			client()
-			configName = "Testmod Client"
-			vmArgs("-DMC_DEBUG_DEBUG_ENABLED=true")
-
-			source(sourceSets["testmodClient"])
-		}
-
-		create("testmodServer") {
-			server()
-			name = "Testmod Server"
-			vmArgs("-DMC_DEBUG_DEBUG_ENABLED=true")
-			source(sourceSets["testmod"])
-		}
-
-		configureEach {
-			vmArgs("-Dmixin.debug.verify=true")
-		}
-	}
-}
-
-repositories {
-	mavenCentral()
-	mavenLocal()
-
-	maven {
-		name = "Spirit Studios Releases"
-		url = uri("https://maven.spiritstudios.dev/snapshots/")
-
-		content {
-			@Suppress("UnstableApiUsage")
-			includeGroupAndSubgroups("dev.spiritstudios")
-		}
-	}
-
-	maven {
-		name = "ParchmentMC"
-		url = uri("https://maven.parchmentmc.org")
-
-		content {
-			@Suppress("UnstableApiUsage")
-			includeGroupAndSubgroups("org.parchmentmc")
-		}
-	}
-}
-
-dependencies {
-	minecraft(libs.minecraft)
-	mappings(
-		@Suppress("UnstableApiUsage")
-		loom.layered {
-			officialMojangMappings()
-			parchment(libs.parchment)
-		}
-	)
-
-	modImplementation(libs.fabric.loader)
-
-	modImplementation(libs.fabric.api)
-
-	implementation(libs.mojank)
-
-	"testmodImplementation"(sourceSets["main"].output)
-	"testmodClientImplementation"(sourceSets["testmod"].output)
-	"testmodClientImplementation"(sourceSets["client"].output)
-}
-
-abstract class GeneratePackageInfosTask : DefaultTask() {
-	@SkipWhenEmpty
-	@InputDirectory
-	val root = project.objects.directoryProperty()
-
-	@OutputDirectory
-	val output = project.objects.directoryProperty()
-
-	@TaskAction
-	fun action() {
-		val outputPath = output.get().asFile.toPath()
-		val rootPath = root.get().asFile.toPath()
-
-		for (dir in arrayOf("impl", "mixin")) {
-			val sourceDir = rootPath.resolve("dev/spiritstudios/spectre/$dir")
-			if (sourceDir.notExists()) continue
-
-			sourceDir.toFile().walk()
-				.filter { it.isDirectory }
-				.forEach {
-					val hasFiles = it.listFiles()
-						?.filter { file -> !file.isDirectory }
-						?.any { file -> file.isFile && file.name.endsWith(".java") } ?: false;
-
-					if (!hasFiles || it.resolve("package-info.java").exists())
-						return@forEach
-
-					val relative = rootPath.relativize(it.toPath())
-					val target = outputPath.resolve(relative)
-					target.createDirectories()
-
-					val packageName = relative.toString().replace(File.separator, ".")
-					target.resolve("package-info.java").writer().use { writer ->
-						writer.write(
-							"""
-							|/**
-							| * Internal implementation classes for Spectre.
-							| * Do not use these classes directly.
-							| */
-							|
-							|@ApiStatus.Internal
-							|package $packageName;
-							|
-							|import org.jetbrains.annotations.ApiStatus;
-							 """.trimMargin()
-						)
-					}
-				}
-		}
-	}
-}
-
-for (sourceSet in arrayOf(sourceSets["main"], sourceSets["client"])) {
-	val task = tasks.register<GeneratePackageInfosTask>(sourceSet.getTaskName("generate", "PackageInfos")) {
-		group = "codegen"
-
-		root = file("src/${sourceSet.name}/java")
-		output = file("src/generated/${sourceSet.name}")
-	}
-
-	sourceSet.java.srcDir(task)
-
-	val cleanTask = tasks.register<Delete>(sourceSet.getTaskName("clean", "PackageInfos")) {
-		group = "codegen"
-		delete(file("src/generated/${sourceSet.name}"))
-	}
-
-	tasks.clean.configure { dependsOn(cleanTask) }
-}
-
-tasks.processResources {
-	val map = mapOf(
-		"version" to modVersion,
-		"loader_version" to libs.versions.fabric.loader.get()
-	)
-
-	inputs.properties(map)
-
-	filesMatching("fabric.mod.json") { expand(map) }
-}
-
-java {
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.withType<JavaCompile> {
-	options.encoding = "UTF-8"
-	options.release = 21
-}
-
-tasks.jar {
-	from("LICENSE") { rename { "${it}_$modId" } }
-}
-
-publishing {
-	publications {
-		create<MavenPublication>("mavenJava") {
-			artifactId = modId
-			from(components["java"])
-		}
-	}
-
-	repositories {
-		maven {
-			name = "SpiritStudiosReleases"
-			url = uri("https://maven.spiritstudios.dev/releases")
-			credentials(PasswordCredentials::class)
-		}
-
-		maven {
-			name = "SpiritStudiosSnapshots"
-			url = uri("https://maven.spiritstudios.dev/snapshots")
-			credentials(PasswordCredentials::class)
-		}
-
-		mavenLocal()
+		compileClasspath += sourceSets["testmod"].compileClasspath
+		runtimeClasspath += sourceSets["testmod"].runtimeClasspath
 	}
 }
