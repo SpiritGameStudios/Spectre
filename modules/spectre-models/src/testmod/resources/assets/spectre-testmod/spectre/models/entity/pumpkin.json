@@ -1,35 +1,35 @@
 {
-	"author": "Kat",
 	"version": "0.0.1",
 	"layers": {
-		"Pumpkin Layer Main": {
+		"main": {
 			"type": "spectre:living_entity",
 			"texture": "pumpkin:pumpkin_texture",
 			"texture_size": [64, 64]
 		},
-		"Pumpkin Secondary Layer": {
+		"mustache": {
 			"type": "spectre:living_entity",
-			"texture": "minecraft:mumbo_mustache_texture",
+			"texture": "pumpkin:mumbo_mustache_texture",
 			"texture_size": [64, 64]
 		}
 	},
 	"bones": [
 		{
 			"name": "root",
-			"layer": "Pumpkin Layer Main",
-			"pivot": [1, 24, 0],
+			"layer": "main",
+			"pivot": [-1, 24, 0],
 			"rotation": [0, 0, 0],
 			"cubes": [],
 			"children": [
 				{
 					"name": "body",
-					"layer": "Pumpkin Layer Main",
-					"pivot": [-1, -5, 0],
+					"layer": "main",
+					"pivot": [1, 5, 0],
 					"rotation": [0, 0, 0],
 					"cubes": [
 						{
 							"name": "body",
 							"from": [-4, 5, -3],
+							"layer": "main",
 							"to": [4, 11, 3],
 							"uv": [0, 15]
 						}
@@ -37,31 +37,35 @@
 					"children": [
 						{
 							"name": "head",
-							"layer": "Pumpkin Layer Main",
-							"pivot": [0, -6, 0],
+							"layer": "main",
+							"pivot": [0, 6, 0],
 							"rotation": [0, 0, 0],
 							"cubes": [
 								{
 									"name": "head",
 									"from": [-4, 11, -5],
+									"layer": "main",
 									"to": [4, 16, 5],
 									"uv": [0, 0]
 								},
 								{
 									"name": "head",
 									"from": [-1, 10, -6],
+									"layer": "main",
 									"to": [1, 13, -4],
 									"uv": [56, 0]
 								},
 								{
 									"name": "head",
 									"from": [-1, 16, -1],
+									"layer": "main",
 									"to": [1, 20, 1],
 									"uv": [37, 8]
 								},
 								{
 									"name": "head",
 									"from": [-2, 20, -2],
+									"layer": "main",
 									"to": [2, 24, 2],
 									"uv": [37, 0]
 								}
@@ -69,14 +73,15 @@
 							"children": [
 								{
 									"name": "mustache",
-									"layer": "Pumpkin Secondary Layer",
-									"pivot": [0, -1, -2.2],
+									"layer": "mustache",
+									"pivot": [0, 1, -2.2],
 									"rotation": [0, 0, 0],
 									"cubes": [
 										{
 											"name": "cube",
-											"from": [-3, 10, -6.1],
-											"to": [3, 12, -6.1],
+											"from": [-3, -10, 8.1],
+											"layer": "mustache",
+											"to": [3, -8, 8.1],
 											"uv": [0, 37]
 										}
 									]
@@ -85,13 +90,14 @@
 						},
 						{
 							"name": "right_arm",
-							"layer": "null",
-							"pivot": [-4, -6, 0],
+							"layer": "main",
+							"pivot": [4, 6, 0],
 							"rotation": [0, 0, 0],
 							"cubes": [
 								{
 									"name": "right_arm",
 									"from": [4, 2, -2],
+									"layer": "main",
 									"to": [7, 12, 2],
 									"uv": [36, 16]
 								}
@@ -99,8 +105,8 @@
 							"children": [
 								{
 									"name": "rightItem",
-									"layer": "null",
-									"pivot": [-1, 7.4, -1],
+									"layer": "main",
+									"pivot": [1, -7.4, -1],
 									"rotation": [0, 0, 0],
 									"cubes": []
 								}
@@ -108,13 +114,14 @@
 						},
 						{
 							"name": "left_arm",
-							"layer": "Pumpkin Layer Main",
-							"pivot": [4, -6, 0],
+							"layer": "main",
+							"pivot": [-4, 6, 0],
 							"rotation": [0, 0, 0],
 							"cubes": [
 								{
 									"name": "left_arm",
 									"from": [-7, 2, -2],
+									"layer": "main",
 									"to": [-4, 12, 2],
 									"uv": [50, 16]
 								}
@@ -124,13 +131,14 @@
 				},
 				{
 					"name": "right_leg",
-					"layer": "Pumpkin Layer Main",
-					"pivot": [-3, -5, 0],
+					"layer": "main",
+					"pivot": [3, 5, 0],
 					"rotation": [0, 0, 0],
 					"cubes": [
 						{
 							"name": "right_leg",
 							"from": [-0.1, 0, -1.99],
+							"layer": "main",
 							"to": [3.9, 5, 2.01],
 							"uv": [0, 27]
 						}
@@ -138,13 +146,14 @@
 				},
 				{
 					"name": "left_leg",
-					"layer": "Pumpkin Layer Main",
-					"pivot": [1, -5, 0],
+					"layer": "main",
+					"pivot": [-1, 5, 0],
 					"rotation": [0, 0, 0],
 					"cubes": [
 						{
 							"name": "left_leg",
 							"from": [-3.9, 0, -2],
+							"layer": "main",
 							"to": [0.1, 5, 2],
 							"uv": [16, 27]
 						}

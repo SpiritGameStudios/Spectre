@@ -1,6 +1,7 @@
 package dev.spiritstudios.spectre.impl.models.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
@@ -15,13 +16,15 @@ public class ModelPartDebugRenderer {
 	// TODO: Turn into a proper debug renderer
 	// FIXME: Debug cubes/parts are offset from the real model for some reason?
 
-	public static final boolean ENABLED = false;
+	public static final boolean ENABLED = true;
 
 	public static void debugModelPart(ModelPart part, PoseStack.Pose pose) {
 		if (!ENABLED) return;
 
+		var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+
 		var dir = pose.transformNormal(0, 0, 0, new Vector3f());
-		var partPos = new Vec3(pose.pose().transformPosition(0, 0, 0, new Vector3f()));
+		var partPos = new Vec3(pose.pose().transformPosition(0, 0, 0, new Vector3f())).add(cameraPos);
 
 		var name = part.spectre$getName();
 		if (name.equals("Unset")) return;
@@ -44,6 +47,8 @@ public class ModelPartDebugRenderer {
 	public static void debugCube(ModelPart part, PoseStack.Pose pose, ModelPart.Cube cube) {
 		if (!ENABLED) return;
 
+		var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+
 		Matrix4f mat = pose.pose();
 		var min = new Vector3f(cube.minX, cube.minY, cube.minZ).div(16F);
 		var max = new Vector3f(cube.maxX, cube.maxY, cube.maxZ).div(16F);
@@ -53,8 +58,8 @@ public class ModelPartDebugRenderer {
 		int color = ARGB.opaque((name + "meowmeowmeow").hashCode());
 
 		var aabb = new AABB(
-			new Vec3(mat.transformPosition(min)),
-			new Vec3(mat.transformPosition(max))
+			new Vec3(mat.transformPosition(min)).add((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z),
+			new Vec3(mat.transformPosition(max)).add((float) cameraPos.x, (float) cameraPos.y, (float) cameraPos.z)
 		);
 
 		var centre = aabb.getCenter();
@@ -82,16 +87,16 @@ public class ModelPartDebugRenderer {
 //			var faceCentre = v1Pos.lerp(v3Pos, 0.5F, new Vector3f());
 //			Gizmos.point(new Vec3(faceCentre), color, 7.5F);
 
-			Gizmos.point(new Vec3(v0Pos), color, 7.5F);
-			Gizmos.point(new Vec3(v1Pos), color, 7.5F);
-			Gizmos.point(new Vec3(v2Pos), color, 7.5F);
-			Gizmos.point(new Vec3(v3Pos), color, 7.5F);
+			Gizmos.point(new Vec3(v0Pos).add(cameraPos), color, 7.5F);
+			Gizmos.point(new Vec3(v1Pos).add(cameraPos), color, 7.5F);
+			Gizmos.point(new Vec3(v2Pos).add(cameraPos), color, 7.5F);
+			Gizmos.point(new Vec3(v3Pos).add(cameraPos), color, 7.5F);
 
 			Gizmos.rect(
-				new Vec3(v0Pos),
-				new Vec3(v1Pos),
-				new Vec3(v2Pos),
-				new Vec3(v3Pos),
+				new Vec3(v0Pos).add(cameraPos),
+				new Vec3(v1Pos).add(cameraPos),
+				new Vec3(v2Pos).add(cameraPos),
+				new Vec3(v3Pos).add(cameraPos),
 				GizmoStyle.stroke(color)
 			);
 		}
