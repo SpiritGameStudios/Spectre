@@ -27,13 +27,14 @@ public interface LayerData<RenderState extends EntityRenderState> {
 				.forGetter(LayerData::textureSize);
 	}
 
-	default RenderLayer<RenderState, ?> build(
-		RenderLayerParent<RenderState, EntityModel<RenderState>> parent,
-		EntityModel<RenderState> model
+	default <M extends EntityModel<RenderState>> RenderLayer<RenderState, M> build(
+		RenderLayerParent<RenderState, M> parent,
+		M model
 	) {
-		return build(
+		return type().build(
 			parent,
-			model
+			model,
+			this
 		);
 	}
 

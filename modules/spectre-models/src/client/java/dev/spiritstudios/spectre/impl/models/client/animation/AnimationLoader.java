@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import dev.spiritstudios.spectre.api.models.client.animation.AnimationLocation;
 import dev.spiritstudios.spectre.api.models.client.animation.EntityAnimationSet;
 import dev.spiritstudios.spectre.api.models.client.animation.SpectreAnimationDefinition;
-import dev.spiritstudios.spectre.impl.models.client.serial.AnimationJson;
+import dev.spiritstudios.spectre.impl.models.client.serial.SpectreAnimationFile;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
@@ -54,7 +54,7 @@ public class AnimationLoader implements PreparableReloadListener {
 
 			for (Resource resource : entry.getValue()) {
 				try (Reader reader = resource.openAsReader()) {
-					AnimationJson.CODEC.parse(JsonOps.INSTANCE, StrictJsonParser.parse(reader))
+					SpectreAnimationFile.CODEC.parse(JsonOps.INSTANCE, StrictJsonParser.parse(reader))
 						.ifSuccess(animations -> {
 							animations.animations().forEach((name, animation) -> {
 								results.put(

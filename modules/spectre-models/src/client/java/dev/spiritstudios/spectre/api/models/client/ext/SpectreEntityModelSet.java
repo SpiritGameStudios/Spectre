@@ -1,8 +1,5 @@
 package dev.spiritstudios.spectre.api.models.client.ext;
 
-import dev.spiritstudios.spectre.api.models.client.animation.AnimationLocation;
-import dev.spiritstudios.spectre.api.models.client.animation.EntityAnimationSet;
-import dev.spiritstudios.spectre.api.models.client.animation.SpectreKeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,18 +11,7 @@ import net.minecraft.resources.Identifier;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * This is an injected interface, don't use it directly
- */
-public interface SpectreEntityRendererProviderContext {
-	default EntityAnimationSet getAnimationSet() {
-		throw new IllegalStateException("Implemented via mixin.");
-	}
-
-	default SpectreKeyframeAnimation bakeAnimation(AnimationLocation location, ModelPart part) {
-		return getAnimationSet().bake(location, part);
-	}
-
+public interface SpectreEntityModelSet {
 	default <S extends EntityRenderState, M extends EntityModel<S>> RenderLayer<S, M> bakeRenderLayer(
 		ModelLayerLocation location,
 		RenderLayerParent<S, M> parent,

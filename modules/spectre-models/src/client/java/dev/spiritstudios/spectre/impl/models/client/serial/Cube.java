@@ -39,10 +39,13 @@ public record Cube(
 			.ifLeft(offsets -> builder.texOffs((int) offsets.x(), (int) offsets.y()))
 			.ifRight(faceUV::set);
 
+
+		var size = to.sub(from, new Vector3f());
+
 		builder.mirror(false).addBox(
 			from.x(), from.y(), from.z(),
-			to.x(), to.y(), to.z(),
-			new CubeDeformation(1F),
+			size.x, size.y, size.z,
+			new CubeDeformation(0F),
 			1.0F, 1.0F
 		);
 
@@ -59,9 +62,9 @@ public record Cube(
 //		inflate /= 16F;
 //
 //		var min = new Vector3f(
-//			-(origin.x + size.x),
-//			origin.y,
-//			origin.z
+//			-(pivot.x + size.x),
+//			pivot.y,
+//			pivot.z
 //		);
 //
 //		var max = min.add(size, new Vector3f());

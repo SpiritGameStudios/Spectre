@@ -1,11 +1,18 @@
 classTweaker v1 official
 
+### Injections
+
 inject-interface net/minecraft/client/renderer/entity/EntityRenderDispatcher dev/spiritstudios/spectre/impl/models/client/ext/SpectreInternalEntityRenderDispatcher
 
 inject-interface net/minecraft/client/model/geom/ModelPart dev/spiritstudios/spectre/impl/models/client/ext/SpectreModelPart
-
 inject-interface net/minecraft/client/model/geom/builders/CubeDefinition dev/spiritstudios/spectre/impl/models/client/ext/SpectreCubeDef
 
 inject-interface net/minecraft/client/renderer/entity/EntityRendererProvider$Context dev/spiritstudios/spectre/impl/models/client/ext/SpectreInternalEntityRendererProviderContext
 
 transitive-inject-interface net/minecraft/client/renderer/entity/EntityRendererProvider$Context dev/spiritstudios/spectre/api/models/client/ext/SpectreEntityRendererProviderContext
+transitive-inject-interface net/minecraft/client/model/geom/builders/PartDefinition dev/spiritstudios/spectre/api/models/client/ext/SpectrePartDefinition
+transitive-inject-interface net/minecraft/client/model/geom/EntityModelSet dev/spiritstudios/spectre/api/models/client/ext/SpectreEntityModelSet
+
+### AWs
+
+accessible method net/minecraft/client/model/geom/builders/LayerDefinition <init> (Lnet/minecraft/client/model/geom/builders/MeshDefinition;Lnet/minecraft/client/model/geom/builders/MaterialDefinition;)V

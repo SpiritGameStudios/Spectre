@@ -3,8 +3,11 @@ package dev.spiritstudios.spectre.impl.models.client;
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
+import dev.spiritstudios.spectre.api.models.client.layer.SpectreLayerDefinition;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MaterialDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
@@ -31,22 +34,36 @@ public class SpectreModelLoader {
 			var id = lister.fileToId(entry.getKey());
 
 			for (Resource resource : entry.getValue()) {
+
 				try (Reader reader = resource.openAsReader()) {
 					SpectreModelFile.CODEC.parse(JsonOps.INSTANCE, StrictJsonParser.parse(reader))
 						.ifSuccess(file -> {
+							MeshDefinition allMesh = new MeshDefinition().transformed(p -> p.translated(0.0F, 24.0F, 0.0F));
+							var allRoot = allMesh.getRoot();
+
 							for (SpectreLayerDefinition<?, ?> layer : file.layers()) {
+								var root = layer.mesh().getRoot();
+								root.copyCubeless(allRoot);
+
 								results.put(
 									new ModelLayerLocation(
-										lister.fileToId(entry.getKey()),
+										id,
 										layer.name()
 									),
-									LayerDefinition.create(
-										layer.mesh(),
-										layer.data().textureSize().x(),
-										layer.data().textureSize().y()
-									)
+									layer
 								);
 							}
+
+							results.put(
+								new ModelLayerLocation(
+									id,
+									"all"
+								),
+								new LayerDefinition(
+									allMesh,
+									new MaterialDefinition(0, 0)
+								)
+							);
 						})
 						.ifError(error -> LOGGER.error("Couldn't parse geometry file '{}': {}", id, error));
 				} catch (IllegalArgumentException | IOException | JsonParseException error) {

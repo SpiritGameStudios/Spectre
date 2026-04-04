@@ -17,7 +17,7 @@ import net.minecraft.util.CommonColors;
 import net.minecraft.util.ExtraCodecs;
 import org.joml.Vector2ic;
 
-public class LivingEntityLayer<S extends LivingEntityRenderState> extends RenderLayer<S, EntityModel<S>> {
+public class LivingEntityLayer<S extends LivingEntityRenderState, M extends EntityModel<S>> extends RenderLayer<S, M> {
 	public record Data(
 		Vector2ic textureSize,
 		Identifier texture,
@@ -34,7 +34,8 @@ public class LivingEntityLayer<S extends LivingEntityRenderState> extends Render
 				ExtraCodecs.STRING_ARGB_COLOR.optionalFieldOf("tint", CommonColors.WHITE).forGetter(Data::tint)
 			).apply(instance, Data::new)),
 			LivingEntityLayer::new,
-			Data.class
+			Data.class,
+			LivingEntityRenderState.class
 		);
 
 		@Override
@@ -46,7 +47,7 @@ public class LivingEntityLayer<S extends LivingEntityRenderState> extends Render
 	private final EntityModel<S> model;
 	private final Data data;
 
-	public LivingEntityLayer(RenderLayerParent<S, EntityModel<S>> renderer, EntityModel<S> model, Data data) {
+	public LivingEntityLayer(RenderLayerParent<S, M> renderer, M model, Data data) {
 		super(renderer);
 
 		this.model = model;

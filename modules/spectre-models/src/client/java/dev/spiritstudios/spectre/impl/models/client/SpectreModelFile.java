@@ -2,6 +2,7 @@ package dev.spiritstudios.spectre.impl.models.client;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.spiritstudios.spectre.api.models.client.layer.SpectreLayerDefinition;
 import dev.spiritstudios.spectre.api.models.client.layer.data.LayerData;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -34,10 +35,10 @@ public record SpectreModelFile(
 		Data data,
 		List<Bone> bones
 	) {
-		MeshDefinition mesh = new MeshDefinition();
+		MeshDefinition mesh = new MeshDefinition().transformed(p -> p.translated(0.0F, 24.0F, 0.0F));
 
 		for (Bone bone : bones) {
-			bone.bake(mesh.getRoot(), null, layerName);
+			bone.bake(mesh.getRoot(), layerName);
 		}
 
 		return new SpectreLayerDefinition<>(layerName, mesh, data);

@@ -2,10 +2,13 @@ package dev.spiritstudios.spectre.impl.models.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.debug.DebugEntryNoop;
+import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.gizmos.TextGizmo;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -13,15 +16,21 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class ModelPartDebugRenderer {
-	// TODO: Turn into a proper debug renderer
-	// FIXME: Debug cubes/parts are offset from the real model for some reason?
+	public static final Identifier BONES = DebugScreenEntries.register(
+		Identifier.fromNamespaceAndPath("spectre-models", "model_part_bones"),
+		new DebugEntryNoop()
+	);
 
-	public static final boolean ENABLED = true;
+	public static final Identifier CUBES = DebugScreenEntries.register(
+		Identifier.fromNamespaceAndPath("spectre-models", "model_part_cubes"),
+		new DebugEntryNoop()
+	);
 
 	public static void debugModelPart(ModelPart part, PoseStack.Pose pose) {
-		if (!ENABLED) return;
+		Minecraft minecraft = Minecraft.getInstance();
+		if (!minecraft.debugEntries.isCurrentlyEnabled(BONES)) return;
 
-		var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+		var cameraPos = minecraft.gameRenderer.getMainCamera().position();
 
 		var dir = pose.transformNormal(0, 0, 0, new Vector3f());
 		var partPos = new Vec3(pose.pose().transformPosition(0, 0, 0, new Vector3f())).add(cameraPos);
@@ -32,10 +41,10 @@ public class ModelPartDebugRenderer {
 
 		final var textStyle = TextGizmo.Style.forColorAndCentered(color).withScale(0.1F);
 
-		Gizmos.point(partPos, color, 25F);
-		Gizmos.billboardText(name, partPos.add(0, 0.35, 0), textStyle);
-		Gizmos.billboardText("Pos(" + part.x + " " + part.y + " " + part.z + ")", partPos.add(0, 0.25, 0), textStyle);
-		Gizmos.billboardText("Rot(" + part.xRot + " " + part.yRot + " " + part.zRot + ")", partPos.add(0, 0.15, 0), textStyle);
+		Gizmos.point(partPos, color, 25F).setAlwaysOnTop();
+		Gizmos.billboardText(name, partPos.add(0, 0.35, 0), textStyle).setAlwaysOnTop();
+		Gizmos.billboardText("Pos(" + part.x + " " + part.y + " " + part.z + ")", partPos.add(0, 0.25, 0), textStyle).setAlwaysOnTop();
+		Gizmos.billboardText("Rot(" + part.xRot + " " + part.yRot + " " + part.zRot + ")", partPos.add(0, 0.15, 0), textStyle).setAlwaysOnTop();
 
 		Gizmos.arrow(
 			partPos,
@@ -45,9 +54,10 @@ public class ModelPartDebugRenderer {
 	}
 
 	public static void debugCube(ModelPart part, PoseStack.Pose pose, ModelPart.Cube cube) {
-		if (!ENABLED) return;
+		Minecraft minecraft = Minecraft.getInstance();
+		if (!minecraft.debugEntries.isCurrentlyEnabled(CUBES)) return;
 
-		var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+		var cameraPos = minecraft.gameRenderer.getMainCamera().position();
 
 		Matrix4f mat = pose.pose();
 		var min = new Vector3f(cube.minX, cube.minY, cube.minZ).div(16F);
@@ -66,8 +76,8 @@ public class ModelPartDebugRenderer {
 
 		final var textStyle = TextGizmo.Style.forColorAndCentered(color).withScale(0.1F);
 
-		Gizmos.billboardText("From(" + cube.minX + " " + cube.minY + " " + cube.minZ + ")", centre.add(0, 0.05F, 0), textStyle);
-		Gizmos.billboardText("To(" + cube.maxX + " " + cube.maxY + " " + cube.maxZ + ")", centre.subtract(0, 0.05, 0), textStyle);
+		Gizmos.billboardText("From(" + cube.minX + " " + cube.minY + " " + cube.minZ + ")", centre.add(0, 0.05F, 0), textStyle).setAlwaysOnTop();
+		Gizmos.billboardText("To(" + cube.maxX + " " + cube.maxY + " " + cube.maxZ + ")", centre.subtract(0, 0.05, 0), textStyle).setAlwaysOnTop();
 
 		Gizmos.point(centre, color, 5F);
 

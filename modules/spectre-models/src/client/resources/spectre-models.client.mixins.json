@@ -13,12 +13,15 @@
 	"mixins": [
 		"CubeDefinitionMixin",
 		"EntityModelSetAccessor",
+		"EntityModelSetMixin",
 		"EntityRenderDispatcherMixin",
 		"EntityRendererProvider$ContextMixin",
 		"MinecraftMixin",
 		"ModelManagerMixin",
 		"ModelPartMixin",
 		"ModelPartMixin$CubeMixin",
+		"PartDefinitionAccessor",
+		"PartDefinitionMixin",
 		"debug.ModelPartMixin",
 		"debug.PartDefinitionMixin"
 	]

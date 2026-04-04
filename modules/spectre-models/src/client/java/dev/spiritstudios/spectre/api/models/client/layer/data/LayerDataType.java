@@ -13,19 +13,22 @@ public final class LayerDataType<Data extends LayerData<RenderState>, RenderStat
 
 	public final MapCodec<Data> codec;
 	private final LayerFactory<Data, RenderState> factory;
-	public final Class<Data> dataClass;
 
-	public LayerDataType(Identifier id, MapCodec<Data> codec, LayerFactory<Data, RenderState> factory, Class<Data> dataClass) {
+	public final Class<Data> dataClass;
+	public final Class<RenderState> renderStateClass;
+
+	public LayerDataType(Identifier id, MapCodec<Data> codec, LayerFactory<Data, RenderState> factory, Class<Data> dataClass, Class<RenderState> renderStateClass) {
 		this.codec = codec;
 		this.factory = factory;
 		this.dataClass = dataClass;
+		this.renderStateClass = renderStateClass;
 
 		ID_MAPPER.put(id, this);
 	}
 
-	public RenderLayer<RenderState, ?> build(
-		RenderLayerParent<RenderState, EntityModel<RenderState>> parent,
-		EntityModel<RenderState> model,
+	public <M extends EntityModel<RenderState>> RenderLayer<RenderState, M> build(
+		RenderLayerParent<RenderState, M> parent,
+		M model,
 		LayerData<RenderState> data
 	) {
 		if (!dataClass.isAssignableFrom(data.getClass())) throw new ClassCastException("Cannot convert '" + data.getClass() + "' to '" + dataClass + "'");
@@ -38,16 +41,16 @@ public final class LayerDataType<Data extends LayerData<RenderState>, RenderStat
 		Data extends LayerData<RenderState>,
 		RenderState extends EntityRenderState
 		> {
-		RenderLayer<RenderState, ?> build(
-			RenderLayerParent<RenderState, EntityModel<RenderState>> parent,
-			EntityModel<RenderState> model,
+		<M extends EntityModel<RenderState>> RenderLayer<RenderState, M> build(
+			RenderLayerParent<RenderState, M> parent,
+			M model,
 			Data data
 		);
 
 		@SuppressWarnings("unchecked")
-		default RenderLayer<RenderState, ?> buildUnsafe(
-			RenderLayerParent<RenderState, EntityModel<RenderState>> parent,
-			EntityModel<RenderState> model,
+		default <M extends EntityModel<RenderState>> RenderLayer<RenderState, M> buildUnsafe(
+			RenderLayerParent<RenderState, M> parent,
+			M model,
 			LayerData<RenderState> data
 		) {
 			return build(parent, model, (Data) data);

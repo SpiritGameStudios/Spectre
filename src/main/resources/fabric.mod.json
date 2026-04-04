@@ -14,7 +14,7 @@
 	"environment": "*",
 	"depends": {
 		"fabricloader": ">=0.18.4",
-		"minecraft": "26.1-rc.1",
+		"minecraft": "26.1",
 		"fabric-api": "*",
 		"java": ">=25"
 	},

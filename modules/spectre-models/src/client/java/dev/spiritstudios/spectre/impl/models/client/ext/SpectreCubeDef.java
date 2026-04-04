@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 
 public interface SpectreCubeDef {
-	ThreadLocal<@Nullable Map<Direction, Face>> FACE_UV = new ThreadLocal<>();
+	ScopedValue<@Nullable Map<Direction, Face>> FACE_UV = ScopedValue.newInstance();
 
 	default void spectre$setFaceUv(Map<Direction, Face> faceUV) {
 		throw new IllegalStateException("Implemented via mixin");

@@ -25,10 +25,6 @@ public class CubeDefinitionMixin implements SpectreCubeDef {
 
 	@WrapMethod(method = "bake")
 	private ModelPart.Cube addThreadLocalFaceUV(int texWidth, int texHeight, Operation<ModelPart.Cube> original) {
-		SpectreCubeDef.FACE_UV.set(faceUV);
-		ModelPart.Cube result = original.call(texWidth, texHeight);
-		SpectreCubeDef.FACE_UV.remove();
-
-		return result;
+		return ScopedValue.where(SpectreCubeDef.FACE_UV, faceUV).call(() -> original.call(texWidth, texHeight));
 	}
 }
